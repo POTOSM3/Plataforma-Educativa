@@ -5,5 +5,12 @@
         "contraseña": "$2y$10$YvV9o2iIwb9J4ZMVgfiWruXBysTCKQqdsYkkc4SR\/lEU7wMSssrEG",
         "materia": "Lenguaje",
         "fecha_registro": "2025-10-24 06:43:46"
+    },
+    {
+        "nombre": "edward",
+        "correo": "supermango1235@gmail.com",
+        "contraseña": "$2y$10$2ZuTjypcpfR5qvB\/wSMqTOL0zg\/ftFJvQvFUvAnXxlo9yBEu\/2IYW",
+        "materia": "Matemática",
+        "fecha_registro": "2025-10-24 22:40:36"
     }
 ]
