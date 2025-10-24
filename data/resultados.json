@@ -7,5 +7,14 @@
         "porcentaje": 66.67,
         "nivel": "Regular",
         "fecha": "2025-10-24 03:17:06"
+    },
+    "1": {
+        "correo": "rp1917012023@unab.edu.sv",
+        "tema": 1,
+        "aciertos": 2,
+        "total": 5,
+        "porcentaje": 40,
+        "nivel": "Regular",
+        "fecha": "2025-10-24 06:57:18"
     }
 }
