@@ -1,108 +1,64 @@
 <?php
 session_start();
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
-    exit;
-}
-
-// Datos del usuario actual
+if (!isset($_SESSION['usuario'])) { header('Location: login.php'); exit; }
 $usuario = $_SESSION['usuario'];
 
-// Cargar resultados
 $archivo_resultados = 'data/resultados.json';
-$resultados = file_exists($archivo_resultados)
-    ? json_decode(file_get_contents($archivo_resultados), true)
-    : [];
-
-// Cargar temas
+$resultados = file_exists($archivo_resultados) ? json_decode(file_get_contents($archivo_resultados), true) : [];
 $archivo_temas = 'data/temas.json';
-$temas = file_exists($archivo_temas)
-    ? json_decode(file_get_contents($archivo_temas), true)
-    : [];
+$temas = file_exists($archivo_temas) ? json_decode(file_get_contents($archivo_temas), true) : [];
 
-// Filtrar resultados solo del usuario actual (por correo)
-$resultados_usuario = array_filter($resultados, function ($r) use ($usuario) {
-    return isset($r['correo']) && $r['correo'] === $usuario['correo'];
-});
+$mis = array_values(array_filter($resultados, fn($r) => ($r['correo'] ?? '') === $usuario['correo']));
+
+ob_start();
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Panel del Estudiante - Plataforma Educativa</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body>
-    <header class="encabezado">
-        <div class="logo">
-            <i data-lucide="graduation-cap"></i>
-            <h1>Plataforma Educativa</h1>
-        </div>
-        <nav>
-            <a href="index.php">Inicio</a>
-            <a href="panel.php" class="activo">Mi Panel</a>
-            <a href="temas.php">Cursos</a>
-            <a href="contacto.php">Contacto</a>
-            <a href="logout.php">Cerrar sesión</a>
-        </nav>
-    </header>
+<section class="banner">
+  <div>
+    <h1 class="title">Panel del estudiante 🎓</h1>
+    <p class="desc">Bienvenido, <strong><?= htmlspecialchars($usuario['nombre']) ?></strong>. Aquí ves tu desempeño y acceso rápido a cursos.</p>
+  </div>
+  <div>
+    <a href="temas.php" class="btn">Ir a cursos</a>
+  </div>
+</section>
 
-    <main class="principal">
-        <section class="bienvenida">
-            <h2>🎓 Panel del Estudiante</h2>
-            <p>Bienvenido, <strong><?= htmlspecialchars($usuario['nombre']) ?></strong></p>
-            <p>Materia de interés: <strong><?= htmlspecialchars($usuario['materia']) ?></strong></p>
-        </section>
-
-        <section class="contenedor panel">
-            <h3>📊 Tus Resultados</h3>
-            <?php if (empty($resultados_usuario)): ?>
-                <p>No tienes resultados todavía. ¡Empieza un cuestionario!</p>
-            <?php else: ?>
-                <table class="tabla-resultados">
-                    <thead>
-                        <tr>
-                            <th>Curso</th>
-                            <th>Aciertos</th>
-                            <th>Total</th>
-                            <th>Porcentaje</th>
-                            <th>Nivel</th>
-                            <th>Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($resultados_usuario as $r): ?>
-                            <tr>
-                                <?php
-                                // Buscar el nombre del tema
-                                $nombre_tema = 'Desconocido';
-                                foreach ($temas as $t) {
-                                    if ($t['id'] == $r['tema']) {
-                                        $nombre_tema = $t['titulo'];
-                                        break;
-                                    }
-                                }
-                                ?>
-                                <td><?= htmlspecialchars($nombre_tema) ?></td>
-                                <td><?= $r['aciertos'] ?></td>
-                                <td><?= $r['total'] ?></td>
-                                <td><?= $r['porcentaje'] ?>%</td>
-                                <td><?= htmlspecialchars($r['nivel']) ?></td>
-                                <td><?= htmlspecialchars($r['fecha']) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-        </section>
-    </main>
-
-    <footer>
-        <p>© <?= date('Y') ?> Plataforma Educativa | Equipo de Desarrollo Web</p>
-    </footer>
-
-    <script>lucide.createIcons();</script>
-</body>
-</html>
+<section class="section">
+  <h3>📊 Tus Resultados</h3>
+  <?php if (!$mis): ?>
+    <p class="desc">Aún no tienes resultados. ¡Empieza un cuestionario desde cualquiera de tus cursos!</p>
+  <?php else: ?>
+    <div class="table-wrap" style="overflow:auto">
+      <table style="width:100%; border-collapse:collapse">
+        <thead>
+          <tr style="background:#eef1ff">
+            <th style="padding:12px;text-align:left">Curso</th>
+            <th style="padding:12px">Aciertos</th>
+            <th style="padding:12px">Total</th>
+            <th style="padding:12px">Porcentaje</th>
+            <th style="padding:12px">Nivel</th>
+            <th style="padding:12px">Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($mis as $r): 
+          $nombre_tema = 'Curso';
+          foreach ($temas as $t) if ($t['id']==$r['tema']) { $nombre_tema=$t['titulo']; break; }
+        ?>
+          <tr style="border-top:1px solid #e7e9f3">
+            <td style="padding:12px"><?= htmlspecialchars($nombre_tema) ?></td>
+            <td style="padding:12px;text-align:center"><?= (int)$r['aciertos'] ?></td>
+            <td style="padding:12px;text-align:center"><?= (int)$r['total'] ?></td>
+            <td style="padding:12px;text-align:center"><?= (float)$r['porcentaje'] ?>%</td>
+            <td style="padding:12px;text-align:center"><span class="badge"><?= htmlspecialchars($r['nivel']) ?></span></td>
+            <td style="padding:12px;text-align:center"><?= htmlspecialchars($r['fecha']) ?></td>
+          </tr>
+        <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+  <?php endif; ?>
+</section>
+<?php
+$content = ob_get_clean();
+$page_title = 'Mi Panel — EduLive';
+require 'components/layout.php';
