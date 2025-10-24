@@ -1,165 +1,182 @@
-<?php session_start(); ?>
+<?php
+session_start();
+if (isset($_SESSION['usuario'])) {
+    header("Location: index.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Iniciar Sesión - Plataforma Educativa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="css/styles.css">
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1d3557, #457b9d);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
+  <meta charset="UTF-8">
+  <title>Iniciar Sesión — EduLive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --primary1: #6C63FF;
+      --primary2: #00D4FF;
+      --accent: #FFD166;
+      --text: #fff;
+    }
 
-        .login-container {
-            display: flex;
-            width: 900px;
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-        }
+    * { box-sizing: border-box; }
 
-        .login-info {
-            width: 50%;
-            background: #1d3557;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            text-align: center;
-        }
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, var(--primary1), var(--primary2));
+      color: var(--text);
+    }
 
-        .login-info h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
+    /* === FONDO ANIMADO === */
+    .floating-icons {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-        .login-info p {
-            font-size: 1em;
-            opacity: 0.9;
-        }
+    .floating-icons i {
+      position: absolute;
+      color: rgba(255,255,255,0.25);
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      animation: fall linear infinite;
+    }
 
-        .login-form {
-            width: 50%;
-            padding: 60px 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: #f8f9fa;
-        }
+    @keyframes fall {
+      0% {
+        transform: translateY(-10vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      50% {
+        transform: translateY(50vh) translateX(20px) rotate(180deg);
+      }
+      100% {
+        transform: translateY(110vh) translateX(-20px) rotate(360deg);
+        opacity: 0;
+      }
+    }
 
-        .login-form h2 {
-            color: #1d3557;
-            margin-bottom: 30px;
-            text-align: center;
-        }
+    /* === TARJETA LOGIN === */
+    .login-card {
+      position: relative;
+      z-index: 1;
+      width: 400px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 50px 40px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      color: #fff;
+    }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .login-card h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
 
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 5px;
-            color: #1d3557;
-        }
+    .login-card p {
+      font-size: .95rem;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
 
-        input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-        }
+    .login-card label {
+      display: block;
+      text-align: left;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
 
-        input:focus {
-            border-color: #457b9d;
-            outline: none;
-        }
+    .login-card input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 20px;
+      outline: none;
+      font-size: 1rem;
+    }
 
-        button {
-            background: #e9c46a;
-            border: none;
-            color: #1d3557;
-            font-weight: 600;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+    .login-card button {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #f4a261);
+      border: none;
+      color: #1d3557;
+      font-weight: 700;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
 
-        button:hover {
-            background: #f4a261;
-        }
+    .login-card button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
 
-        .extra-links {
-            margin-top: 20px;
-            text-align: center;
-        }
+    .extra {
+      margin-top: 20px;
+      font-size: .9rem;
+    }
 
-        .extra-links a {
-            text-decoration: none;
-            color: #457b9d;
-            font-weight: 600;
-        }
-
-        .extra-links a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 800px) {
-            .login-container {
-                flex-direction: column;
-                width: 95%;
-            }
-            .login-info, .login-form {
-                width: 100%;
-                padding: 30px;
-            }
-        }
-    </style>
+    .extra a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-info">
-            <i data-lucide="graduation-cap" style="width: 70px; height: 70px; color: #e9c46a;"></i>
-            <h1>Plataforma Educativa</h1>
-            <p>Accede a tus cursos, cuestionarios y progreso académico.</p>
-        </div>
+  <div class="floating-icons" id="icon-container"></div>
 
-        <div class="login-form">
-            <h2><i data-lucide="lock" style="vertical-align: middle;"></i> Iniciar Sesión</h2>
-            <form action="validar_login.php" method="POST">
-                <div class="form-group">
-                    <label for="correo">Correo electrónico</label>
-                    <input type="email" name="correo" id="correo" placeholder="ejemplo@correo.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="contraseña">Contraseña</label>
-                    <input type="password" name="contraseña" id="contraseña" placeholder="********" required>
-                </div>
-                <button type="submit">Iniciar Sesión</button>
-            </form>
+  <div class="login-card">
+    <i data-lucide="graduation-cap" style="width:50px; height:50px; color:var(--accent);"></i>
+    <h1>Bienvenido a EduLive</h1>
+    <p>Accede a tus cursos, aprende y mide tu progreso 🚀</p>
 
-            <div class="extra-links">
-                <p>¿No tienes cuenta? <a href="registro.php">Registrarte aquí</a></p>
-            </div>
-        </div>
+    <form action="validar_login.php" method="POST">
+      <label for="correo">Correo electrónico</label>
+      <input type="email" name="correo" id="correo" placeholder="ejemplo@correo.com" required>
+
+      <label for="contraseña">Contraseña</label>
+      <input type="password" name="contraseña" id="contraseña" placeholder="********" required>
+
+      <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    <div class="extra">
+      ¿No tienes cuenta? <a href="registro.php">Regístrate</a>
     </div>
+  </div>
 
-    <script>lucide.createIcons();</script>
+  <script>
+    lucide.createIcons();
+    const icons = ['book-open', 'flask-conical', 'globe', 'calculator', 'pen-tool', 'graduation-cap'];
+    const container = document.getElementById('icon-container');
+
+    for (let i = 0; i < 25; i++) {
+      const icon = document.createElement('i');
+      icon.setAttribute('data-lucide', icons[Math.floor(Math.random() * icons.length)]);
+      icon.style.left = Math.random() * 100 + '%';
+      icon.style.fontSize = 20 + Math.random() * 25 + 'px';
+      icon.style.animationDuration = 8 + Math.random() * 8 + 's';
+      icon.style.animationDelay = Math.random() * 5 + 's';
+      container.appendChild(icon);
+    }
+
+    lucide.createIcons();
+  </script>
 </body>
 </html>
