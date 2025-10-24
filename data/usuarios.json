@@ -1,1 +1,9 @@
-[]
+[
+    {
+        "nombre": "edward",
+        "correo": "rp1917012023@unab.edu.sv",
+        "contraseña": "$2y$10$YvV9o2iIwb9J4ZMVgfiWruXBysTCKQqdsYkkc4SR\/lEU7wMSssrEG",
+        "materia": "Lenguaje",
+        "fecha_registro": "2025-10-24 06:43:46"
+    }
+]

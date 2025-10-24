@@ -1,6 +1,11 @@
 <?php
 session_start();
-// Leer el archivo JSON
+if (!isset($_SESSION['usuario'])) {
+    header("Location: login.php");
+    exit;
+}
+
+// Cargar los temas solo si hay sesión iniciada
 $archivo = 'data/temas.json';
 $datos = file_get_contents($archivo);
 $temas = json_decode($datos, true);
@@ -24,22 +29,15 @@ $temas = json_decode($datos, true);
             <a href="index.php">Inicio</a>
             <a href="temas.php">Cursos</a>
             <a href="contacto.php">Contacto</a>
-            <?php if (isset($_SESSION['usuario'])): ?>
-                <a href="logout.php">Cerrar sesión</a>
-            <?php else: ?>
-                <a href="login.php">Iniciar Sesión</a>
-            <?php endif; ?>
+            <a href="logout.php">Cerrar sesión</a>
         </nav>
     </header>
 
     <main class="principal">
         <section class="bienvenida">
-            <h2>📚 Bienvenido a la Plataforma Educativa</h2>
-            <?php if (isset($_SESSION['usuario'])): ?>
-                <p>Hola, <strong><?= htmlspecialchars($_SESSION['usuario']['nombre']) ?></strong>. Explora los cursos disponibles y mejora tus conocimientos.</p>
-            <?php else: ?>
-                <p>Explora las materias, estudia los temas y pon a prueba tus conocimientos con cuestionarios interactivos.</p>
-            <?php endif; ?>
+            <h2>👋 Bienvenido, <?= htmlspecialchars($_SESSION['usuario']['nombre']) ?>!</h2>
+            <p>Materia de interés: <strong><?= htmlspecialchars($_SESSION['usuario']['materia']) ?></strong></p>
+            <p>Explora tus cursos disponibles a continuación.</p>
         </section>
 
         <section class="contenedor">

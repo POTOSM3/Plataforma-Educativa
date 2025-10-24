@@ -1,16 +1,13 @@
 <?php
 session_start();
 
-// Datos enviados desde el formulario
 $correo = trim($_POST['correo'] ?? '');
 $contraseña = trim($_POST['contraseña'] ?? '');
 
-// Validación básica
 if ($correo === '' || $contraseña === '') {
-    die("Por favor ingresa tus datos correctamente.");
+    die("Por favor completa todos los campos.");
 }
 
-// Leer usuarios registrados desde JSON
 $archivo = 'data/usuarios.json';
 if (!file_exists($archivo)) {
     die("No hay usuarios registrados todavía.");
@@ -18,7 +15,6 @@ if (!file_exists($archivo)) {
 
 $usuarios = json_decode(file_get_contents($archivo), true);
 
-// Verificar credenciales
 $usuario_encontrado = null;
 foreach ($usuarios as $u) {
     if (strtolower($u['correo']) === strtolower($correo) && password_verify($contraseña, $u['contraseña'])) {
@@ -33,8 +29,6 @@ if ($usuario_encontrado) {
         'correo' => $usuario_encontrado['correo'],
         'materia' => $usuario_encontrado['materia']
     ];
-
-    // Redirigir al inicio
     header("Location: index.php");
     exit;
 } else {

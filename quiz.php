@@ -1,5 +1,11 @@
 <?php
 session_start();
+if (!isset($_SESSION['usuario'])) {
+    header("Location: login.php");
+    exit;
+}
+
+
 $tema = isset($_GET['tema']) ? intval($_GET['tema']) : 1;
 $archivo = "data/preguntas_{$tema}.json";
 $preguntas = file_exists($archivo) ? json_decode(file_get_contents($archivo), true) : [];

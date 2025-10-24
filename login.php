@@ -14,7 +14,6 @@
             <h1>Plataforma Educativa</h1>
         </div>
         <nav>
-            <a href="index.php">Inicio</a>
             <a href="registro.php">Registro</a>
             <a href="login.php" class="activo">Iniciar Sesión</a>
         </nav>

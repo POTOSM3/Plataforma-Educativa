@@ -1,5 +1,12 @@
 <?php
+
 session_start();
+if (!isset($_SESSION['usuario'])) {
+    header("Location: login.php");
+    exit;
+}
+
+
 $archivo = 'data/temas.json';
 $datos = file_get_contents($archivo);
 $temas = json_decode($datos, true);
