@@ -1,0 +1,43 @@
+<?php
+session_start();
+
+// Datos enviados desde el formulario
+$correo = trim($_POST['correo'] ?? '');
+$contraseña = trim($_POST['contraseña'] ?? '');
+
+// Validación básica
+if ($correo === '' || $contraseña === '') {
+    die("Por favor ingresa tus datos correctamente.");
+}
+
+// Leer usuarios registrados desde JSON
+$archivo = 'data/usuarios.json';
+if (!file_exists($archivo)) {
+    die("No hay usuarios registrados todavía.");
+}
+
+$usuarios = json_decode(file_get_contents($archivo), true);
+
+// Verificar credenciales
+$usuario_encontrado = null;
+foreach ($usuarios as $u) {
+    if (strtolower($u['correo']) === strtolower($correo) && password_verify($contraseña, $u['contraseña'])) {
+        $usuario_encontrado = $u;
+        break;
+    }
+}
+
+if ($usuario_encontrado) {
+    $_SESSION['usuario'] = [
+        'nombre' => $usuario_encontrado['nombre'],
+        'correo' => $usuario_encontrado['correo'],
+        'materia' => $usuario_encontrado['materia']
+    ];
+
+    // Redirigir al inicio
+    header("Location: index.php");
+    exit;
+} else {
+    echo "<h2 style='text-align:center; font-family:Poppins; color:#c0392b;'>❌ Correo o contraseña incorrectos.</h2>";
+    echo "<p style='text-align:center;'><a href='login.php'>Volver</a></p>";
+}

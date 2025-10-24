@@ -1,5 +1,6 @@
 <?php
-// Leer el archivo JSON de materias
+session_start();
+// Leer el archivo JSON
 $archivo = 'data/temas.json';
 $datos = file_get_contents($archivo);
 $temas = json_decode($datos, true);
@@ -14,25 +15,31 @@ $temas = json_decode($datos, true);
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <!-- ENCABEZADO -->
     <header class="encabezado">
         <div class="logo">
             <i data-lucide="graduation-cap"></i>
             <h1>Plataforma Educativa</h1>
         </div>
         <nav>
-            <a href="index.php" class="activo">Inicio</a>
+            <a href="index.php">Inicio</a>
             <a href="temas.php">Cursos</a>
             <a href="contacto.php">Contacto</a>
-            <a href="#">Cerrar sesión</a>
+            <?php if (isset($_SESSION['usuario'])): ?>
+                <a href="logout.php">Cerrar sesión</a>
+            <?php else: ?>
+                <a href="login.php">Iniciar Sesión</a>
+            <?php endif; ?>
         </nav>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
     <main class="principal">
         <section class="bienvenida">
             <h2>📚 Bienvenido a la Plataforma Educativa</h2>
-            <p>Explora las materias, estudia los temas y pon a prueba tus conocimientos con cuestionarios interactivos.</p>
+            <?php if (isset($_SESSION['usuario'])): ?>
+                <p>Hola, <strong><?= htmlspecialchars($_SESSION['usuario']['nombre']) ?></strong>. Explora los cursos disponibles y mejora tus conocimientos.</p>
+            <?php else: ?>
+                <p>Explora las materias, estudia los temas y pon a prueba tus conocimientos con cuestionarios interactivos.</p>
+            <?php endif; ?>
         </section>
 
         <section class="contenedor">
@@ -60,14 +67,8 @@ $temas = json_decode($datos, true);
         </section>
     </main>
 
-    <!-- PIE DE PÁGINA -->
     <footer>
         <p>© <?= date('Y') ?> Plataforma Educativa | Equipo de Desarrollo Web</p>
-        <div class="redes">
-            <a href="#"><i data-lucide="instagram"></i></a>
-            <a href="#"><i data-lucide="facebook"></i></a>
-            <a href="#"><i data-lucide="youtube"></i></a>
-        </div>
     </footer>
 
     <script>lucide.createIcons();</script>

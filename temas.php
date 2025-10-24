@@ -1,8 +1,8 @@
 <?php
+session_start();
 $archivo = 'data/temas.json';
 $datos = file_get_contents($archivo);
 $temas = json_decode($datos, true);
-
 $id = isset($_GET['id']) ? intval($_GET['id']) : 1;
 $tema = $temas[$id - 1] ?? $temas[0];
 ?>
@@ -23,9 +23,13 @@ $tema = $temas[$id - 1] ?? $temas[0];
         </div>
         <nav>
             <a href="index.php">Inicio</a>
-            <a href="temas.php" class="activo">Cursos</a>
+            <a href="temas.php">Cursos</a>
             <a href="contacto.php">Contacto</a>
-            <a href="#">Cerrar sesión</a>
+            <?php if (isset($_SESSION['usuario'])): ?>
+                <a href="logout.php">Cerrar sesión</a>
+            <?php else: ?>
+                <a href="login.php">Iniciar Sesión</a>
+            <?php endif; ?>
         </nav>
     </header>
 

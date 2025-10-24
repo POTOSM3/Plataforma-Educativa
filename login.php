@@ -1,9 +1,8 @@
-<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Contacto - Plataforma Educativa</title>
+    <title>Iniciar Sesión - Plataforma Educativa</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -16,40 +15,30 @@
         </div>
         <nav>
             <a href="index.php">Inicio</a>
-            <a href="temas.php">Cursos</a>
-            <a href="contacto.php" class="activo">Contacto</a>
-            <?php if (isset($_SESSION['usuario'])): ?>
-                <a href="logout.php">Cerrar sesión</a>
-            <?php else: ?>
-                <a href="login.php">Iniciar Sesión</a>
-            <?php endif; ?>
+            <a href="registro.php">Registro</a>
+            <a href="login.php" class="activo">Iniciar Sesión</a>
         </nav>
     </header>
 
     <main class="principal">
         <section class="bienvenida">
-            <h2>📩 Contáctanos</h2>
-            <p>¿Tienes dudas o sugerencias? Envíanos un mensaje y te responderemos pronto.</p>
+            <h2>🔐 Iniciar Sesión</h2>
+            <p>Introduce tu correo y contraseña para acceder a tus cursos.</p>
         </section>
 
         <section class="formulario-contacto">
-            <form action="guardar_contacto.php" method="POST" class="form">
-                <div class="campo">
-                    <label for="nombre">Nombre completo</label>
-                    <input type="text" name="nombre" id="nombre" required>
-                </div>
-
+            <form action="validar_login.php" method="POST" class="form">
                 <div class="campo">
                     <label for="correo">Correo electrónico</label>
                     <input type="email" name="correo" id="correo" required>
                 </div>
 
                 <div class="campo">
-                    <label for="mensaje">Mensaje</label>
-                    <textarea name="mensaje" id="mensaje" rows="5" required></textarea>
+                    <label for="contraseña">Contraseña</label>
+                    <input type="password" name="contraseña" id="contraseña" required>
                 </div>
 
-                <button type="submit" class="btn">Enviar mensaje</button>
+                <button type="submit" class="btn">Iniciar Sesión</button>
             </form>
         </section>
     </main>

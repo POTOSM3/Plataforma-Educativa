@@ -1,4 +1,5 @@
 <?php
+session_start();
 $tema = isset($_GET['tema']) ? intval($_GET['tema']) : 1;
 $archivo = "data/preguntas_{$tema}.json";
 $preguntas = file_exists($archivo) ? json_decode(file_get_contents($archivo), true) : [];
@@ -22,7 +23,11 @@ $preguntas = file_exists($archivo) ? json_decode(file_get_contents($archivo), tr
             <a href="index.php">Inicio</a>
             <a href="temas.php">Cursos</a>
             <a href="contacto.php">Contacto</a>
-            <a href="#">Cerrar sesión</a>
+            <?php if (isset($_SESSION['usuario'])): ?>
+                <a href="logout.php">Cerrar sesión</a>
+            <?php else: ?>
+                <a href="login.php">Iniciar Sesión</a>
+            <?php endif; ?>
         </nav>
     </header>
 
