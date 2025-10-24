@@ -1,17 +1,27 @@
 [
   {
     "pregunta": "¿Cuánto es 8 × 7?",
-    "opciones": ["54", "56", "64", "48"],
+    "opciones": ["54", "56", "64", "58"],
     "respuesta": 1
   },
   {
-    "pregunta": "Si 2x + 3 = 11, ¿x = ?",
-    "opciones": ["3", "4", "5", "6"],
-    "respuesta": 1
-  },
-  {
-    "pregunta": "El 25% de 200 es:",
-    "opciones": ["25", "40", "50", "75"],
+    "pregunta": "¿Cuál es el resultado de 25 ÷ 5?",
+    "opciones": ["4", "6", "5", "10"],
     "respuesta": 2
+  },
+  {
+    "pregunta": "¿Cuál es la raíz cuadrada de 49?",
+    "opciones": ["6", "7", "8", "9"],
+    "respuesta": 1
+  },
+  {
+    "pregunta": "¿Qué número es el doble de 15?",
+    "opciones": ["20", "25", "30", "35"],
+    "respuesta": 2
+  },
+  {
+    "pregunta": "¿Cuánto es 12 + 13?",
+    "opciones": ["24", "25", "26", "27"],
+    "respuesta": 1
   }
 ]

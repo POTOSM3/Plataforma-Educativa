@@ -1,17 +1,27 @@
 [
   {
-    "pregunta": "¿Cuáles son los estados de la materia clásicos?",
-    "opciones": ["Sólido, líquido y gaseoso", "Líquido y gaseoso", "Plasma y sólido", "Solo líquido"],
-    "respuesta": 0
+    "pregunta": "¿Cuál es el planeta más cercano al Sol?",
+    "opciones": ["Venus", "Mercurio", "Tierra", "Marte"],
+    "respuesta": 1
   },
   {
-    "pregunta": "Los productores en un ecosistema son:",
-    "opciones": ["Animales", "Hongos", "Plantas", "Bacterias"],
+    "pregunta": "¿Qué gas respiramos los seres humanos?",
+    "opciones": ["Dióxido de carbono", "Nitrógeno", "Oxígeno", "Hidrógeno"],
     "respuesta": 2
   },
   {
-    "pregunta": "La fuerza que nos atrae a la Tierra es:",
-    "opciones": ["Fricción", "Gravedad", "Magnetismo", "Tensión"],
+    "pregunta": "¿Cuál es el órgano principal del sistema circulatorio?",
+    "opciones": ["Pulmones", "Corazón", "Hígado", "Estómago"],
     "respuesta": 1
+  },
+  {
+    "pregunta": "¿Qué fuerza mantiene los planetas en órbita alrededor del Sol?",
+    "opciones": ["Magnetismo", "Gravedad", "Inercia", "Energía térmica"],
+    "respuesta": 1
+  },
+  {
+    "pregunta": "¿Cuál es el estado del agua a 0°C?",
+    "opciones": ["Sólido", "Líquido", "Gaseoso", "Plasma"],
+    "respuesta": 0
   }
 ]

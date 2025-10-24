@@ -331,5 +331,41 @@ nav a.activo {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* ======== PANEL DEL ESTUDIANTE ======== */
+.panel {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.tabla-resultados {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95em;
+}
+
+.tabla-resultados th, .tabla-resultados td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.tabla-resultados th {
+    background-color: #1d3557;
+    color: #fff;
+    font-weight: 600;
+}
+
+.tabla-resultados tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.tabla-resultados tr:hover {
+    background-color: #f0e6cf;
+}
 
 

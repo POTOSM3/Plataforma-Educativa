@@ -1,17 +1,27 @@
 [
   {
-    "pregunta": "¿Cuál es el sinónimo de 'rápido'?",
-    "opciones": ["lento", "veloz", "pesado", "tarde"],
-    "respuesta": 1
-  },
-  {
-    "pregunta": "¿Dónde lleva tilde la palabra 'camion'",
-    "opciones": ["ca-mion", "cam-ión", "camión", "camion"],
+    "pregunta": "¿Cuál de las siguientes palabras está escrita correctamente?",
+    "opciones": ["Aver", "Haber", "A ver", "Averr"],
     "respuesta": 2
   },
   {
-    "pregunta": "¿Qué tipo de palabra es 'el'?",
-    "opciones": ["sustantivo", "artículo", "verbo", "adjetivo"],
+    "pregunta": "¿Qué tipo de palabra es 'rápidamente'?",
+    "opciones": ["Sustantivo", "Adverbio", "Verbo", "Adjetivo"],
+    "respuesta": 1
+  },
+  {
+    "pregunta": "¿Cuál es el sinónimo de 'feliz'?",
+    "opciones": ["Triste", "Contento", "Aburrido", "Serio"],
+    "respuesta": 1
+  },
+  {
+    "pregunta": "¿Cuál es el antónimo de 'alto'?",
+    "opciones": ["Bajo", "Grande", "Largo", "Rápido"],
+    "respuesta": 0
+  },
+  {
+    "pregunta": "¿Qué tipo de oración es '¡Qué bonito día!'?",
+    "opciones": ["Interrogativa", "Exclamativa", "Enunciativa", "Imperativa"],
     "respuesta": 1
   }
 ]

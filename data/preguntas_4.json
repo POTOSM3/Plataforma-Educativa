@@ -1,17 +1,27 @@
 [
   {
-    "pregunta": "La capital de El Salvador es:",
-    "opciones": ["Santa Ana", "San Miguel", "San Salvador", "La Libertad"],
+    "pregunta": "¿Cuál es la capital de El Salvador?",
+    "opciones": ["Santa Ana", "San Miguel", "San Salvador", "La Unión"],
     "respuesta": 2
   },
   {
-    "pregunta": "Un mapa que muestra relieve se llama:",
-    "opciones": ["Político", "Físico", "Climático", "Económico"],
+    "pregunta": "¿Qué colores tiene la bandera de El Salvador?",
+    "opciones": ["Rojo, blanco y azul", "Azul y blanco", "Celeste y amarillo", "Verde y blanco"],
     "respuesta": 1
   },
   {
-    "pregunta": "El Poder Ejecutivo está encabezado por:",
-    "opciones": ["La Asamblea", "La Corte Suprema", "La Presidencia", "Las Alcaldías"],
+    "pregunta": "¿En qué continente se encuentra América Central?",
+    "opciones": ["Europa", "Asia", "América", "África"],
+    "respuesta": 2
+  },
+  {
+    "pregunta": "¿Cuál es el principal idioma de América Latina?",
+    "opciones": ["Portugués", "Inglés", "Francés", "Español"],
+    "respuesta": 3
+  },
+  {
+    "pregunta": "¿En qué año se firmaron los Acuerdos de Paz en El Salvador?",
+    "opciones": ["1990", "1991", "1992", "1993"],
     "respuesta": 2
   }
 ]

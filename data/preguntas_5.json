@@ -1,17 +1,27 @@
 [
   {
-    "pregunta": "¿Cómo se dice 'gracias' en inglés?",
-    "opciones": ["Hello", "Please", "Thanks", "Sorry"],
-    "respuesta": 2
+    "pregunta": "How do you say 'libro' in English?",
+    "opciones": ["Book", "Pencil", "House", "Chair"],
+    "respuesta": 0
   },
   {
-    "pregunta": "El plural de 'child' es:",
-    "opciones": ["childs", "childes", "children", "childrens"],
-    "respuesta": 2
+    "pregunta": "What is the opposite of 'cold'?",
+    "opciones": ["Hot", "Cool", "Warm", "Snow"],
+    "respuesta": 0
   },
   {
-    "pregunta": "Seleccione el saludo correcto:",
-    "opciones": ["Good night (para saludar de día)", "Good morning", "Good bye (para saludar)", "See yesterday"],
+    "pregunta": "What color is the sky on a sunny day?",
+    "opciones": ["Green", "Blue", "Red", "Yellow"],
     "respuesta": 1
+  },
+  {
+    "pregunta": "How do you say 'gracias' in English?",
+    "opciones": ["Sorry", "Thank you", "Please", "Hello"],
+    "respuesta": 1
+  },
+  {
+    "pregunta": "Which word is a fruit?",
+    "opciones": ["Car", "Dog", "Apple", "Table"],
+    "respuesta": 2
   }
 ]
