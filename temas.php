@@ -5,14 +5,36 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
-// Cargar datos del curso desde JSON
+// Cargar archivo JSON de cursos
 $archivo = 'data/temas.json';
 $datos = file_get_contents($archivo);
 $temas = json_decode($datos, true);
 
-// Obtener el id del curso desde la URL
+// Obtener curso actual
 $id = isset($_GET['id']) ? intval($_GET['id']) : 1;
 $tema = $temas[$id - 1] ?? $temas[0];
+
+// Calcular progreso (más adelante se conectará con progreso real)
+$lecciones_totales = 0;
+foreach ($tema['modulos'] as $modulo) {
+    $lecciones_totales += count($modulo['lecciones']);
+}
+$lecciones_completadas = 0;
+$progreso = ($lecciones_totales > 0) ? round(($lecciones_completadas / $lecciones_totales) * 100, 0) : 0;
+
+// Si se selecciona una lección, mostrarla en el visor
+$leccion_activa = $_GET['leccion'] ?? null;
+$contenido = null;
+if ($leccion_activa) {
+    foreach ($tema['modulos'] as $modulo) {
+        foreach ($modulo['lecciones'] as $leccion) {
+            if ($leccion['titulo'] === $leccion_activa) {
+                $contenido = $leccion;
+                break 2;
+            }
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -45,57 +67,50 @@ $tema = $temas[$id - 1] ?? $temas[0];
         </section>
 
         <section class="curso-detalle">
-            <div class="curso-info">
-                <div class="icono-grande">
-                    <?php
-                    switch (strtolower($tema['titulo'])) {
-                        case 'lenguaje': echo '<i data-lucide="book-open"></i>'; break;
-                        case 'matemática': echo '<i data-lucide="calculator"></i>'; break;
-                        case 'ciencias': echo '<i data-lucide="flask-conical"></i>'; break;
-                        case 'sociales': echo '<i data-lucide="globe"></i>'; break;
-                        case 'inglés': echo '<i data-lucide="message-circle"></i>'; break;
-                        default: echo '<i data-lucide="bookmark"></i>';
-                    }
-                    ?>
+            <h3>🎯 Objetivos del curso</h3>
+            <ul>
+                <?php foreach ($tema['objetivos'] as $obj): ?>
+                    <li><?= htmlspecialchars($obj) ?></li>
+                <?php endforeach; ?>
+            </ul>
+
+            <h3 style="margin-top: 30px;">📈 Progreso del curso</h3>
+            <div class="barra-progreso">
+                <div class="progreso" style="width: <?= $progreso ?>%;"><?= $progreso ?>%</div>
+            </div>
+
+            <h3 style="margin-top: 40px;">📚 Módulos y Lecciones</h3>
+            <?php foreach ($tema['modulos'] as $modulo): ?>
+                <div class="modulo">
+                    <h4><?= htmlspecialchars($modulo['titulo']) ?></h4>
+                    <ul class="lecciones">
+                        <?php foreach ($modulo['lecciones'] as $leccion): ?>
+                            <li>
+                                <strong><?= htmlspecialchars($leccion['titulo']) ?></strong>
+                                <span class="tipo"><?= htmlspecialchars($leccion['tipo']) ?></span>
+                                <a href="temas.php?id=<?= $tema['id'] ?>&leccion=<?= urlencode($leccion['titulo']) ?>" class="btn-mini">Abrir</a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
                 </div>
+            <?php endforeach; ?>
 
-                <h3>🎯 Objetivos del curso</h3>
-                <ul>
-                    <li>Comprender los conceptos clave de <?= htmlspecialchars($tema['titulo']) ?>.</li>
-                    <li>Aplicar el conocimiento en ejercicios prácticos y cuestionarios.</li>
-                    <li>Desarrollar habilidades para resolver problemas y analizar situaciones reales.</li>
-                </ul>
-            </div>
-
-            <div class="curso-recursos">
-                <h3>📚 Recursos y Materiales</h3>
-                <p>Te recomendamos repasar los siguientes recursos antes de hacer el cuestionario:</p>
-                <ul>
-                    <?php if (strtolower($tema['titulo']) === 'lenguaje'): ?>
-                        <li>📖 Reglas ortográficas básicas</li>
-                        <li>📝 Ejercicios de sinónimos y antónimos</li>
-                        <li>🎧 Escucha podcasts educativos sobre gramática</li>
-                    <?php elseif (strtolower($tema['titulo']) === 'matemática'): ?>
-                        <li>🧮 Repaso de multiplicaciones y divisiones</li>
-                        <li>📘 Introducción al álgebra básica</li>
-                        <li>📹 Video: Cómo resolver ecuaciones simples</li>
-                    <?php elseif (strtolower($tema['titulo']) === 'ciencias'): ?>
-                        <li>🔬 Estados de la materia</li>
-                        <li>🌍 La fuerza de la gravedad</li>
-                        <li>📹 Documental corto sobre el sistema solar</li>
-                    <?php elseif (strtolower($tema['titulo']) === 'sociales'): ?>
-                        <li>🗺️ Mapas de América Central</li>
-                        <li>📘 Historia de El Salvador</li>
-                        <li>🎞️ Línea del tiempo de los Acuerdos de Paz</li>
-                    <?php elseif (strtolower($tema['titulo']) === 'inglés'): ?>
-                        <li>🔤 Vocabulario básico en inglés</li>
-                        <li>🎧 Escucha pronunciaciones comunes</li>
-                        <li>📹 Video: Saludos y expresiones en inglés</li>
+            <?php if ($contenido): ?>
+                <div class="visor">
+                    <h3>📖 <?= htmlspecialchars($contenido['titulo']) ?></h3>
+                    <?php if (strtolower($contenido['tipo']) === 'pdf'): ?>
+                        <iframe src="<?= htmlspecialchars($contenido['enlace']) ?>" width="100%" height="600px"></iframe>
+                    <?php elseif (strtolower($contenido['tipo']) === 'video' && strpos($contenido['enlace'], 'youtube.com') !== false): ?>
+                        <?php
+                            parse_str(parse_url($contenido['enlace'], PHP_URL_QUERY), $params);
+                            $video_id = $params['v'] ?? '';
+                        ?>
+                        <iframe width="100%" height="500" src="https://www.youtube.com/embed/<?= htmlspecialchars($video_id) ?>" frameborder="0" allowfullscreen></iframe>
                     <?php else: ?>
-                        <li>📖 Material general disponible próximamente.</li>
+                        <p>🔗 <a href="<?= htmlspecialchars($contenido['enlace']) ?>" target="_blank">Abrir recurso externo</a></p>
                     <?php endif; ?>
-                </ul>
-            </div>
+                </div>
+            <?php endif; ?>
 
             <div class="curso-botones">
                 <a href="quiz.php?tema=<?= $tema['id'] ?>" class="btn">Hacer Cuestionario</a>

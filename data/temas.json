@@ -2,31 +2,131 @@
   {
     "id": 1,
     "titulo": "Lenguaje",
-    "descripcion": "Comprensión lectora, gramática y vocabulario.",
-    "detalles": "Lecturas cortas, sinónimos/antónimos, reglas básicas de acentuación."
+    "descripcion": "Aprende gramática, ortografía y comprensión lectora para mejorar tus habilidades comunicativas.",
+    "objetivos": [
+      "Dominar las reglas básicas de ortografía.",
+      "Comprender diferentes tipos de textos.",
+      "Aplicar técnicas de redacción efectiva."
+    ],
+    "modulos": [
+      {
+        "titulo": "Unidad 1: Ortografía y Gramática",
+        "lecciones": [
+          { "titulo": "Reglas de acentuación", "tipo": "PDF", "enlace": "recursos/lenguaje/acento.pdf" },
+          { "titulo": "Uso correcto de b y v", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=dN3t2nSnONw" }
+        ]
+      },
+      {
+        "titulo": "Unidad 2: Comprensión lectora",
+        "lecciones": [
+          { "titulo": "Cómo identificar ideas principales", "tipo": "PDF", "enlace": "recursos/lenguaje/comprension.pdf" },
+          { "titulo": "Ejercicios de lectura", "tipo": "Práctica", "enlace": "recursos/lenguaje/lectura.pdf" }
+        ]
+      }
+    ]
   },
   {
     "id": 2,
     "titulo": "Matemática",
-    "descripcion": "Aritmética, álgebra y resolución de problemas.",
-    "detalles": "Operaciones básicas, ecuaciones simples, proporciones."
+    "descripcion": "Desarrolla tus habilidades numéricas, de razonamiento y resolución de problemas.",
+    "objetivos": [
+      "Aplicar operaciones básicas con fluidez.",
+      "Comprender el uso del álgebra y las ecuaciones simples.",
+      "Analizar y resolver problemas matemáticos cotidianos."
+    ],
+    "modulos": [
+      {
+        "titulo": "Unidad 1: Aritmética",
+        "lecciones": [
+          { "titulo": "Suma, resta, multiplicación y división", "tipo": "PDF", "enlace": "recursos/matematica/aritmetica.pdf" },
+          { "titulo": "Prácticas interactivas", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=QKXWfTHaN1Y" }
+        ]
+      },
+      {
+        "titulo": "Unidad 2: Álgebra básica",
+        "lecciones": [
+          { "titulo": "Ecuaciones de primer grado", "tipo": "PDF", "enlace": "recursos/matematica/algebra.pdf" },
+          { "titulo": "Problemas con incógnitas", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=erVfFZqZHCY" }
+        ]
+      }
+    ]
   },
   {
     "id": 3,
     "titulo": "Ciencias",
-    "descripcion": "Conceptos de biología, física y química.",
-    "detalles": "Estados de la materia, ecosistemas, fuerzas y energía."
+    "descripcion": "Explora los principios de la biología, física y química en el entorno natural.",
+    "objetivos": [
+      "Reconocer los estados de la materia.",
+      "Analizar el funcionamiento del cuerpo humano.",
+      "Explicar las fuerzas que rigen el universo."
+    ],
+    "modulos": [
+      {
+        "titulo": "Unidad 1: El cuerpo humano",
+        "lecciones": [
+          { "titulo": "Sistema circulatorio", "tipo": "PDF", "enlace": "recursos/ciencias/circulatorio.pdf" },
+          { "titulo": "Sistema respiratorio", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=lO2B6vG3uQg" }
+        ]
+      },
+      {
+        "titulo": "Unidad 2: La materia y sus estados",
+        "lecciones": [
+          { "titulo": "Sólido, líquido y gaseoso", "tipo": "PDF", "enlace": "recursos/ciencias/materia.pdf" },
+          { "titulo": "Cambios de estado", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=hi1rPRw7d4Y" }
+        ]
+      }
+    ]
   },
   {
     "id": 4,
     "titulo": "Sociales",
-    "descripcion": "Historia, geografía y civismo.",
-    "detalles": "Mapas, líneas del tiempo, organización del Estado."
+    "descripcion": "Comprende la historia, geografía y sociedad para entender el mundo en que vivimos.",
+    "objetivos": [
+      "Identificar hechos históricos relevantes.",
+      "Analizar el impacto de la geografía en las culturas.",
+      "Reconocer la importancia de la ciudadanía."
+    ],
+    "modulos": [
+      {
+        "titulo": "Unidad 1: Historia de El Salvador",
+        "lecciones": [
+          { "titulo": "Independencia y formación del Estado", "tipo": "PDF", "enlace": "recursos/sociales/historia.pdf" },
+          { "titulo": "Acuerdos de Paz", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=4aqCkzO4SmY" }
+        ]
+      },
+      {
+        "titulo": "Unidad 2: Geografía de América",
+        "lecciones": [
+          { "titulo": "Mapas políticos y físicos", "tipo": "PDF", "enlace": "recursos/sociales/mapas.pdf" },
+          { "titulo": "Países y capitales", "tipo": "Práctica", "enlace": "recursos/sociales/capitales.pdf" }
+        ]
+      }
+    ]
   },
   {
     "id": 5,
     "titulo": "Inglés",
-    "descripcion": "Vocabulario y estructuras básicas.",
-    "detalles": "Saludos, tiempos simples, vocabulario cotidiano."
+    "descripcion": "Aprende vocabulario, pronunciación y estructuras básicas del idioma inglés.",
+    "objetivos": [
+      "Comprender frases y expresiones comunes.",
+      "Mejorar la pronunciación a través de práctica constante.",
+      "Aplicar estructuras gramaticales simples en conversaciones."
+    ],
+    "modulos": [
+      {
+        "titulo": "Unidad 1: Saludos y presentaciones",
+        "lecciones": [
+          { "titulo": "Greetings and Introductions", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=6EAMqKUimr8" },
+          { "titulo": "Simple sentences", "tipo": "PDF", "enlace": "recursos/ingles/sentences.pdf" }
+        ]
+      },
+      {
+        "titulo": "Unidad 2: Vocabulario básico",
+        "lecciones": [
+          { "titulo": "Colors and Numbers", "tipo": "PDF", "enlace": "recursos/ingles/colors.pdf" },
+          { "titulo": "Everyday objects", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=btDk3YVvU2U" }
+        ]
+      }
+    ]
   }
 ]
