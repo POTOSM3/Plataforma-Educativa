@@ -1,0 +1,17 @@
+[
+    {
+        "pregunta": "¿Cuánto es 5 + 3?",
+        "opciones": ["6", "7", "8", "9"],
+        "correcta": "8"
+    },
+    {
+        "pregunta": "¿Cuál es el área de un cuadrado con lado 4?",
+        "opciones": ["8", "12", "16", "20"],
+        "correcta": "16"
+    },
+    {
+        "pregunta": "¿Qué es la mediana del conjunto 3, 5, 7?",
+        "opciones": ["3", "5", "7", "6"],
+        "correcta": "5"
+    }
+]

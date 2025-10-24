@@ -1,0 +1,17 @@
+[
+  {
+    "pregunta": "La capital de El Salvador es:",
+    "opciones": ["Santa Ana", "San Miguel", "San Salvador", "La Libertad"],
+    "respuesta": 2
+  },
+  {
+    "pregunta": "Un mapa que muestra relieve se llama:",
+    "opciones": ["Político", "Físico", "Climático", "Económico"],
+    "respuesta": 1
+  },
+  {
+    "pregunta": "El Poder Ejecutivo está encabezado por:",
+    "opciones": ["La Asamblea", "La Corte Suprema", "La Presidencia", "Las Alcaldías"],
+    "respuesta": 2
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "pregunta": "¿Cuánto es 8 × 7?",
+    "opciones": ["54", "56", "64", "48"],
+    "respuesta": 1
+  },
+  {
+    "pregunta": "Si 2x + 3 = 11, ¿x = ?",
+    "opciones": ["3", "4", "5", "6"],
+    "respuesta": 1
+  },
+  {
+    "pregunta": "El 25% de 200 es:",
+    "opciones": ["25", "40", "50", "75"],
+    "respuesta": 2
+  }
+]

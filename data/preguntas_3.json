@@ -1,0 +1,17 @@
+[
+  {
+    "pregunta": "¿Cuáles son los estados de la materia clásicos?",
+    "opciones": ["Sólido, líquido y gaseoso", "Líquido y gaseoso", "Plasma y sólido", "Solo líquido"],
+    "respuesta": 0
+  },
+  {
+    "pregunta": "Los productores en un ecosistema son:",
+    "opciones": ["Animales", "Hongos", "Plantas", "Bacterias"],
+    "respuesta": 2
+  },
+  {
+    "pregunta": "La fuerza que nos atrae a la Tierra es:",
+    "opciones": ["Fricción", "Gravedad", "Magnetismo", "Tensión"],
+    "respuesta": 1
+  }
+]

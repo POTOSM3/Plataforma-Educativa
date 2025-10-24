@@ -1,0 +1,17 @@
+[
+  {
+    "pregunta": "¿Cómo se dice 'gracias' en inglés?",
+    "opciones": ["Hello", "Please", "Thanks", "Sorry"],
+    "respuesta": 2
+  },
+  {
+    "pregunta": "El plural de 'child' es:",
+    "opciones": ["childs", "childes", "children", "childrens"],
+    "respuesta": 2
+  },
+  {
+    "pregunta": "Seleccione el saludo correcto:",
+    "opciones": ["Good night (para saludar de día)", "Good morning", "Good bye (para saludar)", "See yesterday"],
+    "respuesta": 1
+  }
+]

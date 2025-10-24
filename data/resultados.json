@@ -1,0 +1,11 @@
+{
+    "resultado": "Obtuviste 2 de 3 (66.666666666667%). Regular 😐",
+    "0": {
+        "tema": 1,
+        "aciertos": 2,
+        "total": 3,
+        "porcentaje": 66.67,
+        "nivel": "Regular",
+        "fecha": "2025-10-24 03:17:06"
+    }
+}

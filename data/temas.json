@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "titulo": "Lenguaje",
+    "descripcion": "Comprensión lectora, gramática y vocabulario.",
+    "detalles": "Lecturas cortas, sinónimos/antónimos, reglas básicas de acentuación."
+  },
+  {
+    "id": 2,
+    "titulo": "Matemática",
+    "descripcion": "Aritmética, álgebra y resolución de problemas.",
+    "detalles": "Operaciones básicas, ecuaciones simples, proporciones."
+  },
+  {
+    "id": 3,
+    "titulo": "Ciencias",
+    "descripcion": "Conceptos de biología, física y química.",
+    "detalles": "Estados de la materia, ecosistemas, fuerzas y energía."
+  },
+  {
+    "id": 4,
+    "titulo": "Sociales",
+    "descripcion": "Historia, geografía y civismo.",
+    "detalles": "Mapas, líneas del tiempo, organización del Estado."
+  },
+  {
+    "id": 5,
+    "titulo": "Inglés",
+    "descripcion": "Vocabulario y estructuras básicas.",
+    "detalles": "Saludos, tiempos simples, vocabulario cotidiano."
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "pregunta": "¿Cuál es el sinónimo de 'rápido'?",
+    "opciones": ["lento", "veloz", "pesado", "tarde"],
+    "respuesta": 1
+  },
+  {
+    "pregunta": "¿Dónde lleva tilde la palabra 'camion'",
+    "opciones": ["ca-mion", "cam-ión", "camión", "camion"],
+    "respuesta": 2
+  },
+  {
+    "pregunta": "¿Qué tipo de palabra es 'el'?",
+    "opciones": ["sustantivo", "artículo", "verbo", "adjetivo"],
+    "respuesta": 1
+  }
+]
