@@ -162,21 +162,56 @@ if (isset($_SESSION['usuario'])) {
   </div>
 
   <script>
-    lucide.createIcons();
-    const icons = ['book-open', 'flask-conical', 'globe', 'calculator', 'pen-tool', 'graduation-cap'];
-    const container = document.getElementById('icon-container');
+  lucide.createIcons();
 
-    for (let i = 0; i < 25; i++) {
-      const icon = document.createElement('i');
-      icon.setAttribute('data-lucide', icons[Math.floor(Math.random() * icons.length)]);
-      icon.style.left = Math.random() * 100 + '%';
-      icon.style.fontSize = 20 + Math.random() * 25 + 'px';
-      icon.style.animationDuration = 8 + Math.random() * 8 + 's';
-      icon.style.animationDelay = Math.random() * 5 + 's';
-      container.appendChild(icon);
-    }
+  const icons = ['book-open', 'flask-conical', 'globe', 'calculator', 'pen-tool', 'graduation-cap'];
+  const colors = ['#FFD166', '#06D6A0', '#118AB2', '#EF476F', '#A78BFA', '#F4A261'];
+  const container = document.getElementById('icon-container');
 
-    lucide.createIcons();
-  </script>
+  // Crear íconos animados
+  for (let i = 0; i < 25; i++) {
+    const icon = document.createElement('i');
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    icon.setAttribute('data-lucide', icons[Math.floor(Math.random() * icons.length)]);
+    icon.style.position = 'absolute';
+    icon.style.left = Math.random() * 100 + '%';
+    icon.style.top = Math.random() * -100 + 'px'; // Empiezan fuera de pantalla
+    icon.style.fontSize = 20 + Math.random() * 25 + 'px';
+    icon.style.color = color;
+    icon.style.opacity = 0.7;
+    icon.style.filter = `drop-shadow(0 0 8px ${color})`;
+    icon.style.animation = `fall-${i} linear infinite`;
+    icon.style.animationDuration = 6 + Math.random() * 8 + 's';
+    icon.style.animationDelay = Math.random() * 3 + 's';
+    container.appendChild(icon);
+
+    // Movimiento lateral y rotación personalizada
+    const drift = Math.random() * 40 - 20;
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes fall-${i} {
+        0% {
+          transform: translateY(-10vh) translateX(0px) rotate(0deg);
+          opacity: 0;
+          filter: drop-shadow(0 0 5px ${color});
+        }
+        20% { opacity: 1; }
+        50% {
+          transform: translateY(50vh) translateX(${drift}px) rotate(180deg);
+          filter: drop-shadow(0 0 10px ${color});
+        }
+        100% {
+          transform: translateY(110vh) translateX(${-drift}px) rotate(360deg);
+          opacity: 0;
+          filter: drop-shadow(0 0 5px ${color});
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  lucide.createIcons();
+</script>
+
 </body>
 </html>

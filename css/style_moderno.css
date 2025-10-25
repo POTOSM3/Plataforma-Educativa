@@ -1,25 +1,27 @@
 /* ====== RESET & BASE ====== */
 * { box-sizing: border-box; }
-:root{
-  --bg: #f4f6fb;
-  --card: #ffffff;
-  --text: #0f172a;
-  --muted: #6b7280;
-  --brand1: #6C63FF;
-  --brand2: #00D4FF;
-  --accent: #F4A261;
-  --shadow: 0 10px 30px rgba(24, 39, 75, 0.12);
-  --glass: rgba(255,255,255,0.25);
-  --glass-stroke: rgba(255,255,255,0.35);
+body.dark {
+  --bg: #0A192F;
+  --card: #102841;
+  --text: #E3F2FD;
+  --muted: #9EB8D1;
+  --brand1: #29B6F6;
+  --brand2: #1565C0;
+  --accent: #FFD54F;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --glass: rgba(255,255,255,0.08);
+  --glass-stroke: rgba(255,255,255,0.15);
 }
+
+
 body{
   margin:0; font-family:'Poppins',sans-serif; color:var(--text); background:var(--bg);
 }
 
 /* ====== SIDEBAR ====== */
-.sidebar{
+.sidebar {
   position: fixed; top:0; left:0; height:100vh; width:270px;
-  background: linear-gradient(180deg, var(--brand1), var(--brand2));
+  background: linear-gradient(180deg, var(--brand1) 0%, var(--brand2) 60%, #E3F2FD 100%);
   color:#fff; padding:24px; display:flex; flex-direction:column; gap:24px;
   box-shadow: var(--shadow); z-index:100; transform: translateX(0);
   transition: transform .3s ease;

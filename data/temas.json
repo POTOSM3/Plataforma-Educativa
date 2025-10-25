@@ -2,7 +2,7 @@
   {
     "id": 1,
     "titulo": "Lenguaje",
-    "descripcion": "Aprende gramática, ortografía y comprensión lectora para mejorar tus habilidades comunicativas.",
+    "descripcion": "Comprensión lectora, gramática y vocabulario para mejorar tus habilidades comunicativas.",
     "objetivos": [
       "Dominar las reglas básicas de ortografía.",
       "Comprender diferentes tipos de textos.",
@@ -10,17 +10,28 @@
     ],
     "modulos": [
       {
-        "titulo": "Unidad 1: Ortografía y Gramática",
+        "titulo": "Ortografía y Gramática",
         "lecciones": [
-          { "titulo": "Reglas de acentuación", "tipo": "PDF", "enlace": "recursos/lenguaje/acento.pdf" },
-          { "titulo": "Uso correcto de b y v", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=dN3t2nSnONw" }
+          {
+            "titulo": "Reglas básicas de acentuación",
+            "tipo": "pdf",
+            "enlace": "https://www.afphandbook.com/pdfs/reglas_acentuacion.pdf"
+          },
+          {
+            "titulo": "Uso correcto de signos de puntuación",
+            "tipo": "video",
+            "enlace": "https://www.youtube.com/watch?v=U3i4YqVtZ8M"
+          }
         ]
       },
       {
-        "titulo": "Unidad 2: Comprensión lectora",
+        "titulo": "Comprensión Lectora",
         "lecciones": [
-          { "titulo": "Cómo identificar ideas principales", "tipo": "PDF", "enlace": "recursos/lenguaje/comprension.pdf" },
-          { "titulo": "Ejercicios de lectura", "tipo": "Práctica", "enlace": "recursos/lenguaje/lectura.pdf" }
+          {
+            "titulo": "Técnicas para leer mejor",
+            "tipo": "video",
+            "enlace": "https://www.youtube.com/watch?v=6V7SbQb5u5A"
+          }
         ]
       }
     ]
@@ -28,25 +39,36 @@
   {
     "id": 2,
     "titulo": "Matemática",
-    "descripcion": "Desarrolla tus habilidades numéricas, de razonamiento y resolución de problemas.",
+    "descripcion": "Aritmética, álgebra y resolución de problemas de forma práctica y divertida.",
     "objetivos": [
-      "Aplicar operaciones básicas con fluidez.",
-      "Comprender el uso del álgebra y las ecuaciones simples.",
-      "Analizar y resolver problemas matemáticos cotidianos."
+      "Fortalecer el cálculo mental.",
+      "Desarrollar razonamiento lógico.",
+      "Aplicar álgebra básica en situaciones reales."
     ],
     "modulos": [
       {
-        "titulo": "Unidad 1: Aritmética",
+        "titulo": "Números y Operaciones",
         "lecciones": [
-          { "titulo": "Suma, resta, multiplicación y división", "tipo": "PDF", "enlace": "recursos/matematica/aritmetica.pdf" },
-          { "titulo": "Prácticas interactivas", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=QKXWfTHaN1Y" }
+          {
+            "titulo": "Operaciones básicas con números enteros",
+            "tipo": "pdf",
+            "enlace": "https://www.mateduvirtual.com/pdf/operaciones_basicas.pdf"
+          },
+          {
+            "titulo": "Resolución de problemas",
+            "tipo": "video",
+            "enlace": "https://www.youtube.com/watch?v=dsZ0ZlZ2zvU"
+          }
         ]
       },
       {
-        "titulo": "Unidad 2: Álgebra básica",
+        "titulo": "Álgebra Básica",
         "lecciones": [
-          { "titulo": "Ecuaciones de primer grado", "tipo": "PDF", "enlace": "recursos/matematica/algebra.pdf" },
-          { "titulo": "Problemas con incógnitas", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=erVfFZqZHCY" }
+          {
+            "titulo": "Introducción al Álgebra",
+            "tipo": "video",
+            "enlace": "https://www.youtube.com/watch?v=QW9M8WcTFdA"
+          }
         ]
       }
     ]
@@ -54,25 +76,36 @@
   {
     "id": 3,
     "titulo": "Ciencias",
-    "descripcion": "Explora los principios de la biología, física y química en el entorno natural.",
+    "descripcion": "Explora los conceptos de biología, física y química para comprender el mundo natural.",
     "objetivos": [
-      "Reconocer los estados de la materia.",
-      "Analizar el funcionamiento del cuerpo humano.",
-      "Explicar las fuerzas que rigen el universo."
+      "Comprender el método científico.",
+      "Conocer los principios de la materia y la energía.",
+      "Fomentar el pensamiento crítico en la observación del entorno."
     ],
     "modulos": [
       {
-        "titulo": "Unidad 1: El cuerpo humano",
+        "titulo": "Biología y Ecosistemas",
         "lecciones": [
-          { "titulo": "Sistema circulatorio", "tipo": "PDF", "enlace": "recursos/ciencias/circulatorio.pdf" },
-          { "titulo": "Sistema respiratorio", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=lO2B6vG3uQg" }
+          {
+            "titulo": "Los ecosistemas y su equilibrio",
+            "tipo": "video",
+            "enlace": "https://www.youtube.com/watch?v=H7Fz6ZyA0mU"
+          },
+          {
+            "titulo": "Ciclo de la materia",
+            "tipo": "pdf",
+            "enlace": "https://www.ecosistemas.org/pdf/ciclo_materia.pdf"
+          }
         ]
       },
       {
-        "titulo": "Unidad 2: La materia y sus estados",
+        "titulo": "Física Básica",
         "lecciones": [
-          { "titulo": "Sólido, líquido y gaseoso", "tipo": "PDF", "enlace": "recursos/ciencias/materia.pdf" },
-          { "titulo": "Cambios de estado", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=hi1rPRw7d4Y" }
+          {
+            "titulo": "Las leyes de Newton",
+            "tipo": "video",
+            "enlace": "https://www.youtube.com/watch?v=GyV9sMRa77w"
+          }
         ]
       }
     ]
@@ -80,25 +113,36 @@
   {
     "id": 4,
     "titulo": "Sociales",
-    "descripcion": "Comprende la historia, geografía y sociedad para entender el mundo en que vivimos.",
+    "descripcion": "Aprende historia, geografía y civismo para comprender la sociedad y su evolución.",
     "objetivos": [
-      "Identificar hechos históricos relevantes.",
-      "Analizar el impacto de la geografía en las culturas.",
-      "Reconocer la importancia de la ciudadanía."
+      "Comprender los orígenes de las civilizaciones.",
+      "Analizar procesos históricos importantes.",
+      "Valorar la participación ciudadana."
     ],
     "modulos": [
       {
-        "titulo": "Unidad 1: Historia de El Salvador",
+        "titulo": "Historia Universal",
         "lecciones": [
-          { "titulo": "Independencia y formación del Estado", "tipo": "PDF", "enlace": "recursos/sociales/historia.pdf" },
-          { "titulo": "Acuerdos de Paz", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=4aqCkzO4SmY" }
+          {
+            "titulo": "Las civilizaciones antiguas",
+            "tipo": "pdf",
+            "enlace": "https://www.historiaycultura.com/pdf/civilizaciones_antiguas.pdf"
+          },
+          {
+            "titulo": "La Edad Media",
+            "tipo": "video",
+            "enlace": "https://www.youtube.com/watch?v=G5qE2tIohpQ"
+          }
         ]
       },
       {
-        "titulo": "Unidad 2: Geografía de América",
+        "titulo": "Geografía y Sociedad",
         "lecciones": [
-          { "titulo": "Mapas políticos y físicos", "tipo": "PDF", "enlace": "recursos/sociales/mapas.pdf" },
-          { "titulo": "Países y capitales", "tipo": "Práctica", "enlace": "recursos/sociales/capitales.pdf" }
+          {
+            "titulo": "El espacio geográfico",
+            "tipo": "pdf",
+            "enlace": "https://www.geografiaplanetaria.com/pdf/espacio_geografico.pdf"
+          }
         ]
       }
     ]
@@ -106,25 +150,36 @@
   {
     "id": 5,
     "titulo": "Inglés",
-    "descripcion": "Aprende vocabulario, pronunciación y estructuras básicas del idioma inglés.",
+    "descripcion": "Aprende vocabulario, gramática y pronunciación para comunicarte efectivamente en inglés.",
     "objetivos": [
-      "Comprender frases y expresiones comunes.",
-      "Mejorar la pronunciación a través de práctica constante.",
-      "Aplicar estructuras gramaticales simples en conversaciones."
+      "Ampliar vocabulario cotidiano.",
+      "Comprender estructuras gramaticales básicas.",
+      "Mejorar pronunciación y comprensión auditiva."
     ],
     "modulos": [
       {
-        "titulo": "Unidad 1: Saludos y presentaciones",
+        "titulo": "Vocabulario y Expresiones",
         "lecciones": [
-          { "titulo": "Greetings and Introductions", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=6EAMqKUimr8" },
-          { "titulo": "Simple sentences", "tipo": "PDF", "enlace": "recursos/ingles/sentences.pdf" }
+          {
+            "titulo": "Saludos y Presentaciones",
+            "tipo": "video",
+            "enlace": "https://www.youtube.com/watch?v=vR7C7aU8wL0"
+          },
+          {
+            "titulo": "Vocabulario Básico",
+            "tipo": "pdf",
+            "enlace": "https://www.aprendeingles.net/pdf/vocabulario_basico.pdf"
+          }
         ]
       },
       {
-        "titulo": "Unidad 2: Vocabulario básico",
+        "titulo": "Gramática",
         "lecciones": [
-          { "titulo": "Colors and Numbers", "tipo": "PDF", "enlace": "recursos/ingles/colors.pdf" },
-          { "titulo": "Everyday objects", "tipo": "Video", "enlace": "https://www.youtube.com/watch?v=btDk3YVvU2U" }
+          {
+            "titulo": "Verbo to be",
+            "tipo": "video",
+            "enlace": "https://www.youtube.com/watch?v=VbcgM7pRZlY"
+          }
         ]
       }
     ]
