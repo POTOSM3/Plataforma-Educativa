@@ -1,0 +1,16 @@
+[
+    {
+        "correo": "rp1917012023@unab.edu.sv",
+        "nombre": "edward",
+        "id_curso": 1,
+        "curso": "Lenguaje",
+        "fecha": "2025-10-25 05:56:35"
+    },
+    {
+        "correo": "rp1917012023@unab.edu.sv",
+        "nombre": "edward",
+        "id_curso": 2,
+        "curso": "Matemática",
+        "fecha": "2025-10-25 06:01:58"
+    }
+]

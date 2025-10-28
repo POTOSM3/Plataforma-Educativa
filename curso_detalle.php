@@ -6,9 +6,20 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 $usuario = $_SESSION['usuario'];
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Cargar temas para mostrar algunos cursos destacados
-$temas = json_decode(file_get_contents("data/temas.json"), true) ?? [];
+$temas = json_decode(file_get_contents("data/temas.json"), true);
+$curso = null;
+foreach ($temas as $t) {
+  if ($t['id'] == $id) {
+    $curso = $t;
+    break;
+  }
+}
+
+if (!$curso) {
+  die("⚠️ Curso no encontrado.");
+}
 
 include 'components/layout.php';
 ?>
@@ -17,47 +28,46 @@ include 'components/layout.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio - EduLive</title>
-
-  <!-- ✅ Solución al flash blanco -->
-  <script>
-    (function() {
-      const savedMode = localStorage.getItem('theme');
-      if (savedMode === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.documentElement.style.background = '#0f172a';
-        document.body && (document.body.style.background = '#0f172a');
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.style.background = '#f1f5f9';
-        document.body && (document.body.style.background = '#f1f5f9');
-      }
-    })();
-  </script>
-
+  <title><?= htmlspecialchars($curso['titulo']) ?> - EduLive</title>
   <link rel="stylesheet" href="css/style_moderno.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<?php renderSidebar($usuario, 'inicio'); ?>
+<?php renderSidebar($usuario, 'cursos'); ?>
 
 <main class="content" id="content">
   <section class="banner">
-    <h1 class="title">👋 Bienvenido, <?= htmlspecialchars($usuario['nombre']) ?>!</h1>
-    <p class="desc">Explora tus cursos y revisa tu progreso académico.</p>
-    <a href="cursos.php" class="btn">Ver cursos</a>
+    <h1 class="title">📘 <?= htmlspecialchars($curso['titulo']) ?></h1>
+    <p class="desc"><?= htmlspecialchars($curso['descripcion']) ?></p>
   </section>
 
-  <section class="grid">
-    <?php foreach (array_slice($temas, 0, 3) as $t): ?>
+  <section class="section">
+    <h3>📚 Contenido del curso</h3>
+    <p>Aquí puedes acceder al material de aprendizaje, lecturas y recursos multimedia del curso <strong><?= htmlspecialchars($curso['titulo']) ?></strong>.</p>
+
+    <div class="grid">
       <article class="card">
-        <i data-lucide="bookmark"></i>
-        <h3><?= htmlspecialchars($t['titulo']) ?></h3>
-        <p><?= htmlspecialchars($t['descripcion']) ?></p>
-        <a href="curso_detalle.php?id=<?= $t['id'] ?>" class="btn">Ver curso</a>
+        <i data-lucide="file-text"></i>
+        <h3>📄 Lecturas en PDF</h3>
+        <p>Descarga el material teórico del curso.</p>
+        <a class="btn" href="recursos/<?= strtolower($curso['titulo']) ?>/guia.pdf" target="_blank">Ver PDF</a>
       </article>
-    <?php endforeach; ?>
+
+      <article class="card">
+        <i data-lucide="video"></i>
+        <h3>🎥 Video explicativo</h3>
+        <p>Visualiza clases grabadas para reforzar tu aprendizaje.</p>
+        <a class="btn" href="recursos/<?= strtolower($curso['titulo']) ?>/video.mp4" target="_blank">Ver video</a>
+      </article>
+
+      <article class="card">
+        <i data-lucide="help-circle"></i>
+        <h3>🧠 Evaluación</h3>
+        <p>Evalúa tus conocimientos con el cuestionario final.</p>
+        <a class="btn" href="quiz.php?tema=<?= $curso['id'] ?>">Ir al Quiz</a>
+      </article>
+    </div>
   </section>
 
   <footer class="footer">
@@ -76,12 +86,13 @@ include 'components/layout.php';
 
   const body = document.body;
   const modeBtn = document.getElementById("modeBtn");
-
   const savedMode = localStorage.getItem("theme");
+
   if (savedMode === "dark") {
     body.classList.add("dark");
     modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
   } else {
+    body.classList.remove("dark");
     modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
   }
 
@@ -94,6 +105,5 @@ include 'components/layout.php';
     lucide.createIcons();
   });
 </script>
-
 </body>
 </html>

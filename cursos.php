@@ -6,9 +6,10 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 $usuario = $_SESSION['usuario'];
-
-// Cargar temas para mostrar algunos cursos destacados
-$temas = json_decode(file_get_contents("data/temas.json"), true) ?? [];
+$temas = json_decode(file_get_contents("data/temas.json"), true);
+$inscripciones = file_exists("data/inscripciones.json")
+  ? json_decode(file_get_contents("data/inscripciones.json"), true)
+  : [];
 
 include 'components/layout.php';
 ?>
@@ -17,45 +18,49 @@ include 'components/layout.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicio - EduLive</title>
-
-  <!-- ✅ Solución al flash blanco -->
-  <script>
-    (function() {
-      const savedMode = localStorage.getItem('theme');
-      if (savedMode === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.documentElement.style.background = '#0f172a';
-        document.body && (document.body.style.background = '#0f172a');
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.style.background = '#f1f5f9';
-        document.body && (document.body.style.background = '#f1f5f9');
-      }
-    })();
-  </script>
-
+  <title>Cursos - EduLive</title>
   <link rel="stylesheet" href="css/style_moderno.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<?php renderSidebar($usuario, 'inicio'); ?>
+<?php renderSidebar($usuario, 'cursos'); ?>
 
 <main class="content" id="content">
   <section class="banner">
-    <h1 class="title">👋 Bienvenido, <?= htmlspecialchars($usuario['nombre']) ?>!</h1>
-    <p class="desc">Explora tus cursos y revisa tu progreso académico.</p>
-    <a href="cursos.php" class="btn">Ver cursos</a>
+    <h1 class="title">📘 Cursos Disponibles</h1>
+    <p class="desc">Selecciona los cursos que te interesen e inscríbete gratis.</p>
   </section>
 
   <section class="grid">
-    <?php foreach (array_slice($temas, 0, 3) as $t): ?>
+    <?php foreach ($temas as $t): 
+      $icon = 'bookmark';
+      switch (strtolower($t['titulo'])) {
+        case 'lenguaje': $icon = 'book-open'; break;
+        case 'matemática': $icon = 'calculator'; break;
+        case 'ciencias': $icon = 'flask-conical'; break;
+        case 'sociales': $icon = 'globe'; break;
+        case 'inglés': $icon = 'message-circle'; break;
+      }
+
+      $ya_inscrito = false;
+      foreach ($inscripciones as $i) {
+        if ($i['correo'] === $usuario['correo'] && $i['id_curso'] == $t['id']) {
+          $ya_inscrito = true;
+          break;
+        }
+      }
+    ?>
       <article class="card">
-        <i data-lucide="bookmark"></i>
+        <i data-lucide="<?= $icon ?>"></i>
         <h3><?= htmlspecialchars($t['titulo']) ?></h3>
         <p><?= htmlspecialchars($t['descripcion']) ?></p>
-        <a href="curso_detalle.php?id=<?= $t['id'] ?>" class="btn">Ver curso</a>
+        <?php if ($ya_inscrito): ?>
+          <a class="btn" style="background:linear-gradient(135deg,#06D6A0,#118AB2);color:white;"
+            href="curso_detalle.php?id=<?= $t['id'] ?>">Inscrito ✔</a>
+        <?php else: ?>
+          <a class="btn" href="inscribirse.php?id=<?= $t['id'] ?>">Inscribirse (Gratis)</a>
+        <?php endif; ?>
       </article>
     <?php endforeach; ?>
   </section>
@@ -76,12 +81,13 @@ include 'components/layout.php';
 
   const body = document.body;
   const modeBtn = document.getElementById("modeBtn");
-
   const savedMode = localStorage.getItem("theme");
+
   if (savedMode === "dark") {
     body.classList.add("dark");
     modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
   } else {
+    body.classList.remove("dark");
     modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
   }
 
@@ -94,6 +100,5 @@ include 'components/layout.php';
     lucide.createIcons();
   });
 </script>
-
 </body>
 </html>

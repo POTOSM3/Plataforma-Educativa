@@ -1,29 +1,20 @@
-{
-    "resultado": "Obtuviste 2 de 3 (66.666666666667%). Regular 😐",
-    "0": {
-        "tema": 1,
-        "aciertos": 2,
-        "total": 3,
-        "porcentaje": 66.67,
-        "nivel": "Regular",
-        "fecha": "2025-10-24 03:17:06"
-    },
-    "1": {
-        "correo": "rp1917012023@unab.edu.sv",
-        "tema": 1,
-        "aciertos": 2,
-        "total": 5,
-        "porcentaje": 40,
-        "nivel": "Regular",
-        "fecha": "2025-10-24 06:57:18"
-    },
-    "2": {
-        "correo": "rp1917012023@unab.edu.sv",
-        "tema": 1,
-        "aciertos": 2,
-        "total": 5,
-        "porcentaje": 40,
-        "nivel": "Regular",
-        "fecha": "2025-10-24 23:10:07"
-    }
-}
+[
+  {
+    "correo": "rp1917012023@unab.edu.sv",
+    "tema": 1,
+    "aciertos": 2,
+    "total": 5,
+    "porcentaje": 40,
+    "nivel": "Regular",
+    "fecha": "2025-10-24 06:57:18"
+  },
+  {
+    "correo": "rp1917012023@unab.edu.sv",
+    "tema": 1,
+    "aciertos": 2,
+    "total": 5,
+    "porcentaje": 40,
+    "nivel": "Regular",
+    "fecha": "2025-10-24 23:10:07"
+  }
+]
