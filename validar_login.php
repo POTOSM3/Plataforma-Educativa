@@ -2,6 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
+require 'conexion.php';
 
 $correo = trim($_POST['correo'] ?? '');
 $contraseña = trim($_POST['contraseña'] ?? '');
@@ -10,28 +11,17 @@ if ($correo === '' || $contraseña === '') {
     die("⚠️ Por favor completa todos los campos.");
 }
 
-$archivo = 'data/usuarios.json';
-if (!file_exists($archivo)) {
-    die("❌ No hay usuarios registrados todavía.");
-}
+// Buscar usuario en la DB
+$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE correo = ?");
+$stmt->execute([$correo]);
+$usuario_encontrado = $stmt->fetch();
 
-$usuarios = json_decode(file_get_contents($archivo), true);
-$usuario_encontrado = null;
-
-foreach ($usuarios as $u) {
-    if (strtolower($u['correo']) === strtolower($correo) && password_verify($contraseña, $u['contraseña'])) {
-        $usuario_encontrado = $u;
-        break;
-    }
-}
-
-if ($usuario_encontrado) {
+if ($usuario_encontrado && password_verify($contraseña, $usuario_encontrado['contraseña'])) {
     $_SESSION['usuario'] = [
         'nombre' => $usuario_encontrado['nombre'],
         'correo' => $usuario_encontrado['correo'],
         'materia' => $usuario_encontrado['materia']
     ];
-    // Redirección segura (sin errores de header)
     echo "<script>window.location.href='index.php';</script>";
     exit;
 } else {

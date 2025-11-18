@@ -12,5 +12,12 @@
         "id_curso": 2,
         "curso": "Matemática",
         "fecha": "2025-10-25 06:01:58"
+    },
+    {
+        "correo": "potosmeedward619@gmail.com",
+        "nombre": "edward Recinos",
+        "id_curso": 1,
+        "curso": "Lenguaje",
+        "fecha": "2025-11-18 18:23:15"
     }
 ]
