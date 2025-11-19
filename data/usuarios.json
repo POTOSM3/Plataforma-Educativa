@@ -12,5 +12,12 @@
         "contrase\u00f1a": "$2y$10$h0ar/k71H3lPvrzjjlYIneI4xhrV8/xXHTBTpLeHbhQBelFla5pti",
         "materia": "Ingl\u00e9s",
         "fecha_registro": "2025-11-18 18:22:05"
+    },
+    {
+        "nombre": "Kevin castro",
+        "correo": "castrok@gmail.com",
+        "contrase\u00f1a": "$2y$10$LQJJvTBDunvJA5.rhOz/SOdGf6rh0gJYwISwXhcz0Q5XB9VZ6ujlq",
+        "materia": "Matem\u00e1tica",
+        "fecha_registro": "2025-11-19 05:21:07"
     }
 ]

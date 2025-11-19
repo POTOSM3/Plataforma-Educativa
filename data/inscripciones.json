@@ -19,5 +19,12 @@
         "id_curso": 1,
         "curso": "Lenguaje",
         "fecha": "2025-11-18 18:23:15"
+    },
+    {
+        "correo": "castrok@gmail.com",
+        "nombre": "Kevin castro",
+        "id_curso": 1,
+        "curso": "Lenguaje",
+        "fecha": "2025-11-19 05:28:47"
     }
 ]
