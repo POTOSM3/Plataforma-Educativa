@@ -2,123 +2,88 @@
 session_start();
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
-    exit();
+    exit;
 }
 
-include 'components/layout.php';
+$usuario = $_SESSION['usuario'];
 
-$id = $_GET['id'] ?? null;
+require_once "components/layout.php";
+
+$id = $_GET["id"] ?? 0;
 
 $cursos = [
     1 => [
-        "titulo" => "Lenguaje",
+        "nombre" => "Lenguaje",
         "descripcion" => "Gramática, ortografía y comprensión lectora.",
-        "imagen" => "img/lenguaje.jpg",
-        "pdf" => "recursos/lenguaje/guia de lenguaje.pdf",
-        "video" => "https://www.youtube.com/watch?v=ysz5S6PUM-U",
-        "quiz" => "quiz.php?id=1"
+        "pdf" => "recursos/lenguaje/guia.pdf",
+        "video" => "https://www.youtube.com",
+        "quiz" => "quiz.php?curso=1"
     ],
     2 => [
-        "titulo" => "Matemática",
-        "descripcion" => "Operaciones básicas, fracciones y geometría.",
-        "imagen" => "img/matematica.jpg",
+        "nombre" => "Matemática",
+        "descripcion" => "Aritmética, álgebra y resolución de problemas.",
         "pdf" => "recursos/matematica/guia.pdf",
-        "video" => "https://www.youtube.com/watch?v=RBSGKlAvoiM",
-        "quiz" => "quiz.php?id=2"
-    ],
-    3 => [
-        "titulo" => "Ciencias",
-        "descripcion" => "Sistema solar, cuerpo humano y fenómenos naturales.",
-        "imagen" => "img/ciencias.jpg",
-        "pdf" => "recursos/ciencias/guia.pdf",
-        "video" => "https://www.youtube.com/watch?v=lJIrF4YjHfQ",
-        "quiz" => "quiz.php?id=3"
-    ],
-    4 => [
-        "titulo" => "Sociales",
-        "descripcion" => "Geografía, cultura y sistemas de gobierno.",
-        "imagen" => "img/sociales.jpg",
-        "pdf" => "recursos/sociales/guia.pdf",
-        "video" => "https://www.youtube.com/watch?v=aqImkDgDwHU",
-        "quiz" => "quiz.php?id=4"
-    ],
-    5 => [
-        "titulo" => "Inglés",
-        "descripcion" => "Vocabulario básico, verb to be y estructuras simples.",
-        "imagen" => "img/ingles.jpg",
-        "pdf" => "recursos/ingles/guia.pdf",
-        "video" => "https://www.youtube.com/watch?v=HnQsB2TUgXw",
-        "quiz" => "quiz.php?id=5"
+        "video" => "https://www.youtube.com",
+        "quiz" => "quiz.php?curso=2"
     ],
 ];
 
 $curso = $cursos[$id] ?? null;
 
+if (!$curso) {
+    echo "Curso no encontrado";
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Curso - <?= $curso["titulo"] ?? "Curso" ?></title>
+    <title><?= $curso["nombre"] ?></title>
     <link rel="stylesheet" href="css/style_moderno.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
 
-<?php renderSidebar($_SESSION['usuario'], 'cursos'); ?>
+<?php renderSidebar($usuario, "cursos"); ?>
 
-<main class="content" id="content">
+<main class="content">
 
-<?php if (!$curso): ?>
-    <h2>⚠️ Curso no encontrado</h2>
-
-<?php else: ?>
-
-    <section class="banner">
-        <h1 class="title">📘 <?= $curso["titulo"] ?></h1>
+    <div class="banner">
+        <h2 class="title"><?= $curso["nombre"] ?></h2>
         <p class="desc"><?= $curso["descripcion"] ?></p>
-    </section>
+    </div>
 
-    <img src="<?= $curso["imagen"] ?>" alt="Curso" style="
-        width: 100%; 
-        max-height: 250px; 
-        object-fit: cover; 
-        border-radius: 10px; 
-        margin-bottom: 20px;
-    ">
+    <div class="grid">
 
-    <section class="grid">
-
-        <article class="card">
-            <i data-lucide="file-text"></i>
-            <h3>📄 Guía en PDF</h3>
-            <p>Descarga el material del curso.</p>
+        <div class="card">
+            <i data-lucide="book-open"></i>
+            <h3>Guía PDF</h3>
+            <p>Descarga el material de lectura.</p>
             <a href="<?= $curso["pdf"] ?>" class="btn" target="_blank">Ver PDF</a>
-        </article>
+        </div>
 
-        <article class="card">
+        <div class="card">
             <i data-lucide="video"></i>
-            <h3>🎥 Clase en video</h3>
-            <p>Video explicativo del contenido.</p>
+            <h3>Clase en video</h3>
+            <p>Contenido en formato audiovisual.</p>
             <a href="<?= $curso["video"] ?>" class="btn" target="_blank">Ver Video</a>
-        </article>
+        </div>
 
-        <article class="card">
-            <i data-lucide="help-circle"></i>
-            <h3>🧠 Evaluación</h3>
-            <p>Quiz del curso para evaluar tu aprendizaje.</p>
+        <div class="card">
+            <i data-lucide="brain"></i>
+            <h3>Evaluación</h3>
+            <p>Realiza tu examen del curso.</p>
             <a href="<?= $curso["quiz"] ?>" class="btn">Hacer Quiz</a>
-        </article>
+        </div>
 
-    </section>
-
-<?php endif; ?>
+    </div>
 
 </main>
 
-<script>
-    lucide.createIcons();
-</script>
+<script>lucide.createIcons();</script>
 
 </body>
 </html>

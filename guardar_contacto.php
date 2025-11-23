@@ -4,7 +4,7 @@ session_start();
 // =======================
 // 🔌 CONEXIÓN A LA BD
 // =======================
-require_once "recursos/conexion.php";
+require_once "conexion.php";
 
 // =======================
 // Validar método POST
