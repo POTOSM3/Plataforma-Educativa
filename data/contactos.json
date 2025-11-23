@@ -21,5 +21,23 @@
         "correo": "rp1917012023@unab.edu.sv",
         "mensaje": "hola",
         "fecha": "2025-10-24 06:13:00"
+    },
+    {
+        "nombre": "amigo del futuro",
+        "correo": "A.futuro@hotmail.com",
+        "mensaje": "como cambio contraseña",
+        "fecha": "2025-11-23 04:29:37"
+    },
+    {
+        "nombre": "amigo del futuro",
+        "correo": "A.futuro@hotmail.com",
+        "mensaje": "hola mundo",
+        "fecha": "2025-11-23 04:48:00"
+    },
+    {
+        "nombre": "amigo del futuro",
+        "correo": "A.futuro@hotmail.com",
+        "mensaje": "hacen falta mas cursos",
+        "fecha": "2025-11-23 04:50:21"
     }
 ]

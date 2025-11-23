@@ -26,5 +26,19 @@
         "id_curso": 1,
         "curso": "Lenguaje",
         "fecha": "2025-11-19 05:28:47"
+    },
+    {
+        "correo": "A.futuro@hotmail.com",
+        "nombre": "amigo del futuro",
+        "id_curso": 1,
+        "curso": "Lenguaje",
+        "fecha": "2025-11-23 04:35:37"
+    },
+    {
+        "correo": "A.futuro@hotmail.com",
+        "nombre": "amigo del futuro",
+        "id_curso": 2,
+        "curso": "Matemática",
+        "fecha": "2025-11-23 04:39:12"
     }
 ]

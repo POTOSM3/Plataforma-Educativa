@@ -19,5 +19,12 @@
         "contrase\u00f1a": "$2y$10$LQJJvTBDunvJA5.rhOz/SOdGf6rh0gJYwISwXhcz0Q5XB9VZ6ujlq",
         "materia": "Matem\u00e1tica",
         "fecha_registro": "2025-11-19 05:21:07"
+    },
+    {
+        "nombre": "amigo del futuro",
+        "correo": "A.futuro@hotmail.com",
+        "contrase\u00f1a": "$2y$10$0MgxJAkobxtTG5Frc4pbHuocXZStsQlrWpnd1JfV7YIMptLmAcrmu",
+        "materia": "Ciencias",
+        "fecha_registro": "2025-11-23 04:29:03"
     }
 ]

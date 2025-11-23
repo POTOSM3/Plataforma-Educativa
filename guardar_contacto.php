@@ -1,111 +1,100 @@
 <?php
+session_start();
+require_once "recursos/conexion.php";
+
 // =======================
 // 📨 GUARDAR CONTACTO
 // =======================
 
-session_start();
-
-// Validar método POST
+// Solo aceptar POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  header("Location: contacto.php");
-  exit;
+    die("⚠️ Acceso no permitido. Envía el formulario desde contacto.php");
 }
 
-// Obtener datos del formulario
-$nombre = trim($_POST['nombre'] ?? '');
-$correo = trim($_POST['correo'] ?? '');
+// Recibir datos del formulario
+$nombre  = trim($_POST['nombre'] ?? '');
+$correo  = trim($_POST['correo'] ?? '');
 $mensaje = trim($_POST['mensaje'] ?? '');
 
-// Validar campos
+// Validaciones
 if ($nombre === '' || $correo === '' || $mensaje === '') {
-  die("⚠️ Por favor, completa todos los campos antes de enviar tu mensaje.");
+    die("⚠️ Por favor completa todos los campos.");
 }
 
-// Ruta del archivo JSON
-$archivo = "data/contactos.json";
-
-// Leer contactos existentes
-$contactos = [];
-if (file_exists($archivo)) {
-  $contenido = file_get_contents($archivo);
-  $decodificado = json_decode($contenido, true);
-  if (is_array($decodificado)) {
-    $contactos = $decodificado;
-  }
+if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+    die("⚠️ Ingresa un correo válido.");
 }
 
-// Crear nuevo mensaje
-$nuevo_contacto = [
-  "nombre" => $nombre,
-  "correo" => $correo,
-  "mensaje" => $mensaje,
-  "fecha" => date("Y-m-d H:i:s")
-];
+if(strlen($nombre) > 100 || strlen($correo) > 150 || strlen($mensaje) > 1000){
+    die("⚠️ Algunos campos exceden la longitud permitida.");
+}
 
-// Agregar al arreglo
-$contactos[] = $nuevo_contacto;
+// Guardar en la base de datos
+try {
+    $sql = "INSERT INTO contactos (nombre, correo, mensaje) 
+            VALUES (:nombre, :correo, :mensaje)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':nombre' => $nombre,
+        ':correo' => $correo,
+        ':mensaje'=> $mensaje
+    ]);
+} catch(PDOException $e) {
+    die("❌ Error al guardar contacto: " . $e->getMessage());
+}
 
-// Guardar en JSON
-file_put_contents($archivo, json_encode($contactos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-include 'components/layout.php';
+// =======================
+// ✅ MOSTRAR CONFIRMACIÓN
+// =======================
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mensaje Enviado - EduLive</title>
-  <link rel="stylesheet" href="css/style_moderno.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mensaje Enviado - EduLive</title>
+<link rel="stylesheet" href="css/style_moderno.css">
 </head>
 <body>
 
-<?php renderSidebar($_SESSION['usuario'] ?? ['nombre' => 'Invitado'], 'contacto'); ?>
+<?php renderSidebar($_SESSION['usuario'] ?? ['nombre'=>'Invitado'], 'contacto'); ?>
 
 <main class="content" id="content">
-  <section class="banner">
-    <h1 class="title">✅ ¡Mensaje enviado correctamente!</h1>
-    <p class="desc">Gracias por contactarte con nosotros, <strong><?= htmlspecialchars($nombre) ?></strong>.  
-    Te responderemos lo antes posible al correo <strong><?= htmlspecialchars($correo) ?></strong>.</p>
-    <a href="contacto.php" class="btn">Volver al formulario</a>
-  </section>
+<section class="banner">
+<h1 class="title">✅ ¡Mensaje enviado correctamente!</h1>
+<p class="desc">
+Gracias por contactarte con nosotros, <strong><?= htmlspecialchars($nombre) ?></strong>.<br>
+Te responderemos al correo <strong><?= htmlspecialchars($correo) ?></strong>.
+</p>
+<a href="contacto.php" class="btn">Volver al formulario</a>
+</section>
 
-  <footer class="footer">
-    © <?= date('Y') ?> EduLive — Plataforma Educativa • Hecho con ❤️
-  </footer>
+<section class="mensajes">
+<h2>Mensajes anteriores</h2>
+<?php
+// Mostrar los mensajes existentes en formato JSON similar a contacto.json
+try {
+    $stmt = $pdo->query("SELECT nombre, correo, mensaje, fecha FROM contactos ORDER BY fecha DESC");
+    $contactos = $stmt->fetchAll();
+
+    echo '<pre>';
+    echo json_encode($contactos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    echo '</pre>';
+
+} catch(PDOException $e) {
+    echo "❌ Error al obtener los mensajes: " . $e->getMessage();
+}
+?>
+</section>
+
+<footer class="footer">
+© <?= date('Y') ?> EduLive — Plataforma Educativa • Hecho con ❤️
+</footer>
+
 </main>
 
 <script src="https://unpkg.com/lucide@latest"></script>
-<script>
-  lucide.createIcons();
+<script> lucide.createIcons(); </script>
 
-  function toggleSidebar() {
-    document.getElementById("sidebar").classList.toggle("open");
-    document.getElementById("content").classList.toggle("push");
-  }
-
-  // 🌙 Persistencia del modo oscuro
-  const body = document.body;
-  const modeBtn = document.getElementById("modeBtn");
-  const savedMode = localStorage.getItem("theme");
-
-  if (savedMode === "dark") {
-    body.classList.add("dark");
-    modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
-  } else {
-    body.classList.remove("dark");
-    modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
-  }
-
-  modeBtn.addEventListener("click", () => {
-    const isDark = body.classList.toggle("dark");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-    modeBtn.innerHTML = isDark
-      ? '<i data-lucide="sun"></i> Claro'
-      : '<i data-lucide="moon"></i> Oscuro';
-    lucide.createIcons();
-  });
-</script>
 </body>
 </html>
