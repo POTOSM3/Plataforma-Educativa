@@ -1,9 +1,71 @@
 <?php
 session_start();
+
+// Si el usuario ya está logueado, lo redirige al inicio
 if (isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit;
+  header("Location: index.php");
+ exit;
 }
+
+// === CORRECCIÓN CLAVE: INCLUIR LA CONEXIÓN A LA BASE DE DATOS ===
+require 'conexion.php'; 
+
+// Inicializa el mensaje de error (necesario para el HTML)
+$error_mensaje = '';
+
+// Si usas mensajes de error guardados en sesión, inclúyelos aquí:
+if (isset($_SESSION['login_error'])) {
+    $error_mensaje = $_SESSION['login_error'];
+    unset($_SESSION['login_error']);
+}
+
+// ------------------------------------------------
+// -- PROCESAMIENTO DEL FORMULARIO DE INICIO --
+// ------------------------------------------------
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$correo = $_POST['correo'] ?? '';
+ $password = $_POST['password'] ?? '';
+
+if (empty($correo) || empty($password)) {
+ $error_mensaje = "Por favor, complete todos los campos.";
+ } else {
+ try {
+// 1. Buscar el usuario
+// Ahora $pdo ya está definido gracias a require 'conexion.php';
+ $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE correo = ?");
+ $stmt->execute([$correo]);
+ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// 2. Verificar usuario y contraseña
+ if ($usuario && password_verify($password, $usuario['contraseña'])) {
+
+ // === CÓDIGO DE REGISTRO DE INGRESO ===
+try {
+ // Usamos la tabla 'registros_ingresos'
+ $sql_registro = "INSERT INTO registros_ingresos (correo_usuario) VALUES (?)";
+$stmt_registro = $pdo->prepare($sql_registro);
+ // $pdo está disponible y la consulta se ejecuta
+ $stmt_registro->execute([$usuario['correo']]); 
+ } catch (PDOException $e) {
+ error_log("Error al registrar el ingreso: " . $e->getMessage());
+ }
+
+// 3. Iniciar la sesión y redirigir
+ $_SESSION['usuario'] = $usuario; 
+ header("Location: index.php");
+ exit();
+
+ } else {
+ $error_mensaje = "Correo o contraseña incorrectos.";
+ }
+
+ } catch (PDOException $e) {
+ $error_mensaje = "Error de base de datos: " . $e->getMessage();
+ error_log("Error de login: " . $e->getMessage());
+ }
+ }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -136,6 +198,7 @@ if (isset($_SESSION['usuario'])) {
       font-weight: 600;
       text-decoration: none;
     }
+    
   </style>
 </head>
 <body>
@@ -146,14 +209,14 @@ if (isset($_SESSION['usuario'])) {
     <h1>Bienvenido a EduLive</h1>
     <p>Accede a tus cursos, aprende y mide tu progreso 🚀</p>
 
-    <form action="validar_login.php" method="POST">
-      <label for="correo">Correo electrónico</label>
-      <input type="email" name="correo" id="correo" placeholder="ejemplo@correo.com" required>
+   <form action="login.php" method="POST"> 
+        <label for="correo">Correo electrónico</label>
+        <input type="email" name="correo" id="correo" placeholder="ejemplo@correo.com" required>
 
-      <label for="contraseña">Contraseña</label>
-      <input type="password" name="contraseña" id="contraseña" placeholder="********" required>
+        <label for="contraseña">Contraseña</label>
+        <input type="password" name="password" id="contraseña" placeholder="********" required>
 
-      <button type="submit">Iniciar Sesión</button>
+        <button type="submit">Iniciar Sesión</button>
     </form>
 
     <div class="extra">

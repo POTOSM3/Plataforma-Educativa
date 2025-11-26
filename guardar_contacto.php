@@ -1,21 +1,13 @@
 <?php
 session_start();
-
-// =======================
-// 🔌 CONEXIÓN A LA BD
-// =======================
 require_once "conexion.php";
 
-// =======================
-// Validar método POST
-// =======================
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    die("⚠️ Acceso no permitido. Debes enviar el formulario.");
+    $_SESSION['contacto_error'] = "⚠️ Acceso no permitido. Debes enviar el formulario.";
+    header("Location: contacto.php");
+    exit;
 }
 
-// =======================
-// Obtener datos
-// =======================
 $nombre  = trim($_POST['nombre'] ?? '');
 $correo  = trim($_POST['correo'] ?? '');
 $mensaje = trim($_POST['mensaje'] ?? '');
@@ -24,19 +16,25 @@ $mensaje = trim($_POST['mensaje'] ?? '');
 // Validar datos
 // =======================
 if ($nombre === '' || $correo === '' || $mensaje === '') {
-    die("⚠️ Por favor completa todos los campos.");
+    $_SESSION['contacto_error'] = "⚠️ Por favor completa todos los campos.";
+    header("Location: contacto.php");
+    exit;
 }
 
 if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-    die("⚠️ Ingresa un correo válido.");
+    $_SESSION['contacto_error'] = "⚠️ Ingresa un correo válido.";
+    header("Location: contacto.php");
+    exit;
 }
 
 if (strlen($nombre) > 100 || strlen($correo) > 150 || strlen($mensaje) > 1000) {
-    die("⚠️ Algunos campos exceden la longitud permitida.");
+    $_SESSION['contacto_error'] = "⚠️ Algunos campos exceden la longitud permitida.";
+    header("Location: contacto.php");
+    exit;
 }
 
 // =======================
-// Guardar en la BD
+// Guardar en la BD (Sentencia preparada)
 // =======================
 try {
     $sql = "INSERT INTO contactos (nombre, correo, mensaje) 
@@ -47,38 +45,16 @@ try {
         ":correo"  => $correo,
         ":mensaje" => $mensaje
     ]);
+    
+    // Éxito
+    $_SESSION['contacto_success'] = "✅ ¡Mensaje enviado con éxito! Te responderemos pronto.";
+    header("Location: contacto.php");
+    exit;
+
 } catch (PDOException $e) {
-    die("❌ Error al guardar contacto: " . $e->getMessage());
+    // Error de BD
+    $_SESSION['contacto_error'] = "❌ Error al guardar el mensaje. Intenta más tarde. (Detalle: " . $e->getMessage() . ")";
+    header("Location: contacto.php");
+    exit;
 }
-
-// =======================
-// Cargar layout
-// =======================
-include 'components/layout.php';
-
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mensaje Enviado - EduLive</title>
-  <link rel="stylesheet" href="css/style_moderno.css">
-</head>
-<body>
-
-<?php renderSidebar($_SESSION['usuario'] ?? ['nombre' => 'Invitado'], 'contacto'); ?>
-
-<main class="content" id="content">
-  <section class="banner">
-    <h1 class="title">✅ ¡Mensaje enviado correctamente!</h1>
-    <p class="desc">
-      Gracias por escribirnos, <strong><?= htmlspecialchars($nombre) ?></strong>.  
-      Te responderemos al correo <strong><?= htmlspecialchars($correo) ?></strong>.
-    </p>
-    <a href="contacto.php" class="btn">Volver</a>
-  </section>
-</main>
-
-</body>
-</html>

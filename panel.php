@@ -6,140 +6,154 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 $usuario = $_SESSION['usuario'];
+require 'conexion.php'; // Incluye la conexión a la BD
 
-// Rutas de archivos
-$resultados_path = "data/resultados.json";
-$temas_path = "data/temas.json";
-
-// Cargar temas y resultados de forma segura
-$temas = [];
+// 1. Cargar resultados del quiz del usuario desde la BD
 $resultados = [];
-
-// Cargar temas
-if (file_exists($temas_path)) {
-  $json_temas = file_get_contents($temas_path);
-  $decoded_temas = json_decode($json_temas, true);
-  if (is_array($decoded_temas)) $temas = $decoded_temas;
+try {
+    // Consulta para obtener los resultados del usuario actual (por correo)
+    // Asumimos que tienes una tabla llamada 'resultados_quiz'
+    $sql_resultados = "
+        SELECT 
+            r.curso_id, r.aciertos, r.total_preguntas, 
+            r.porcentaje, r.nivel_logro, r.fecha_resultado,
+            c.titulo AS titulo_curso
+        FROM resultados_quiz r
+        JOIN cursos c ON r.curso_id = c.id
+        WHERE r.usuario_correo = ?
+        ORDER BY r.fecha_resultado DESC
+    ";
+    $stmt = $pdo->prepare($sql_resultados);
+    $stmt->execute([$usuario['correo']]);
+    $resultados = $stmt->fetchAll();
+} catch (PDOException $e) {
+    error_log("Error al cargar resultados: " . $e->getMessage());
+    // Puedes dejar $resultados como un array vacío si hay un error
 }
 
-// Cargar resultados
-if (file_exists($resultados_path)) {
-  $json_resultados = file_get_contents($resultados_path);
-  $decoded_resultados = json_decode($json_resultados, true);
-  if (is_array($decoded_resultados)) {
-    // Elimina resultados viejos tipo string
-    foreach ($decoded_resultados as $r) {
-      if (is_array($r)) $resultados[] = $r;
-    }
-  }
-}
+// Los temas ya no se necesitan para enlazar, ya están en $resultados
+// Si necesitas los temas completos:
+// $stmt_temas = $pdo->query("SELECT id, titulo FROM cursos");
+// $temas_map = $stmt_temas->fetchAll(PDO::FETCH_KEY_PAIR); // ['id' => 'titulo']
 
+// El resto del HTML queda igual, solo que ahora usa $resultados
 include 'components/layout.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel - EduLive</title>
-  <link rel="stylesheet" href="css/style_moderno.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Panel - EduLive</title>
+    <link rel="stylesheet" href="css/style_moderno.css">
+    <script>
+        (function() {
+            const savedMode = localStorage.getItem('theme');
+            if (savedMode === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
 </head>
-<body>
+<body style="background-color: #141a29;">
 
 <?php renderSidebar($usuario, 'panel'); ?>
 
 <main class="content" id="content">
-  <section class="banner">
-    <h1 class="title">🎓 Panel del Estudiante</h1>
-    <p class="desc">Bienvenido, <?= htmlspecialchars($usuario['nombre']) ?>. Aquí ves tu desempeño y acceso rápido a cursos.</p>
-    <a class="btn" href="cursos.php">Ir a cursos</a>
-  </section>
+    <section class="banner">
+        <h1 class="title">📊 Panel de Progreso</h1>
+        <p class="desc">Aquí puedes revisar tus resultados, logros y la información de tu cuenta.</p>
+    </section>
 
-  <section class="section">
-    <h3>📊 Tus Resultados</h3>
+    <section class="progress-info">
+        <div class="stat-card">
+            <i data-lucide="book-open"></i>
+            <h3><?= count($resultados) ?> Quizzes Completados</h3>
+            <p>Revisa tus notas y fortalece tus conocimientos.</p>
+        </div>
+        
+        <div class="stat-card" style="background: #22C55E; color: white;">
+            <i data-lucide="trophy"></i>
+            <h3>Nivel: ⭐ Avanzado</h3> 
+            <p>¡Sigue así para obtener tu certificado!</p>
+        </div>
 
-    <?php
-    // Filtrar solo resultados del usuario actual
-    $mis_resultados = array_filter($resultados, fn($r) =>
-      isset($r['correo']) && $r['correo'] === $usuario['correo']
-    );
-    ?>
+        <div class="stat-card" style="background: #EF4444; color: white;">
+            <i data-lucide="bell"></i>
+            <h3>Notificaciones</h3>
+            <p>Tienes 2 nuevas clases en Lenguaje.</p>
+        </div>
+    </section>
 
-    <?php if (empty($mis_resultados)): ?>
-      <p style="padding: 1rem; background: var(--bg-card); border-radius: 10px; text-align:center;">
-        ⚠️ Aún no tienes resultados registrados.
-      </p>
-    <?php else: ?>
-      <table class="table">
-        <tr>
-          <th>Curso</th>
-          <th>Aciertos</th>
-          <th>Total</th>
-          <th>Porcentaje</th>
-          <th>Nivel</th>
-          <th>Fecha</th>
-        </tr>
-        <?php foreach ($mis_resultados as $r): ?>
-          <?php
-            // Buscar el nombre del curso según su ID (tema)
-            $curso_nombre = "Desconocido";
-            if (isset($r['tema'])) {
-              foreach ($temas as $t) {
-                if ($t['id'] == $r['tema']) {
-                  $curso_nombre = $t['titulo'];
-                  break;
-                }
-              }
-            }
-          ?>
-          <tr>
-            <td><?= htmlspecialchars($curso_nombre) ?></td>
-            <td><?= htmlspecialchars($r['aciertos'] ?? '-') ?></td>
-            <td><?= htmlspecialchars($r['total'] ?? '-') ?></td>
-            <td><?= htmlspecialchars($r['porcentaje'] ?? '-') ?>%</td>
-            <td><?= htmlspecialchars($r['nivel'] ?? '-') ?></td>
-            <td><?= htmlspecialchars($r['fecha'] ?? '-') ?></td>
-          </tr>
-        <?php endforeach; ?>
-      </table>
-    <?php endif; ?>
-  </section>
+    <h2 style="margin-top:2rem; margin-bottom:1rem; font-size:1.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 5px;">Últimos Resultados de Quizzes</h2>
 
-  <footer class="footer">
-    © <?= date('Y') ?> EduLive — Plataforma Educativa • Hecho con ❤️
-  </footer>
+    <section class="results-table">
+        <?php if (empty($resultados)): ?>
+            <p style="text-align:center;">Aún no tienes resultados registrados. ¡Inscríbete en un curso y haz un quiz!</p>
+        <?php else: ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Aciertos</th>
+                        <th>Total</th>
+                        <th>%</th>
+                        <th>Nivel</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($resultados as $r): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($r['titulo_curso'] ?? 'N/A') ?></td>
+                            <td><?= htmlspecialchars($r['aciertos'] ?? '-') ?></td>
+                            <td><?= htmlspecialchars($r['total_preguntas'] ?? '-') ?></td>
+                            <td><?= htmlspecialchars($r['porcentaje'] ?? '-') ?>%</td>
+                            <td><?= htmlspecialchars($r['nivel_logro'] ?? '-') ?></td>
+                            <td><?= date('d/m/Y', strtotime($r['fecha_resultado'] ?? '')) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </section>
+
+    <footer class="footer">
+        © <?= date('Y') ?> EduLive — Plataforma Educativa • Hecho con ❤️
+    </footer>
 </main>
 
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
-  lucide.createIcons();
-
-  function toggleSidebar() {
-    document.getElementById("sidebar").classList.toggle("open");
-    document.getElementById("content").classList.toggle("push");
-  }
-
-  const body = document.body;
-  const modeBtn = document.getElementById("modeBtn");
-  const savedMode = localStorage.getItem("theme");
-
-  if (savedMode === "dark") {
-    body.classList.add("dark");
-    modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
-  } else {
-    body.classList.remove("dark");
-    modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
-  }
-
-  modeBtn.addEventListener("click", () => {
-    const isDark = body.classList.toggle("dark");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-    modeBtn.innerHTML = isDark
-      ? '<i data-lucide="sun"></i> Claro'
-      : '<i data-lucide="moon"></i> Oscuro';
     lucide.createIcons();
-  });
+    
+    // --- LÓGICA DEL BOTÓN DE MODO OSCURO/CLARO ---
+    const body = document.body;
+    const modeBtn = document.getElementById("modeBtn");
+
+    const savedMode = localStorage.getItem("theme");
+    if (savedMode === "dark") {
+      body.classList.add("dark");
+      modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
+    } else {
+      body.classList.remove("dark");
+      modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
+    }
+
+    modeBtn.addEventListener("click", () => {
+      const isDark = body.classList.toggle("dark");
+      if (isDark) {
+        localStorage.setItem("theme", "dark");
+        modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
+      } else {
+        localStorage.setItem("theme", "light");
+        modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
+      }
+      lucide.createIcons(); 
+    });
 </script>
+
 </body>
 </html>

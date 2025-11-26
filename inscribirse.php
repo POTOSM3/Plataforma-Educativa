@@ -1,58 +1,56 @@
 <?php
 session_start();
-
 if (!isset($_SESSION['usuario'])) {
   header("Location: login.php");
   exit;
 }
 
 $usuario = $_SESSION['usuario'];
+require 'conexion.php';
+
 $id_curso = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$correo_usuario = $usuario['correo'];
 
 if ($id_curso <= 0) {
-  die("Error: curso no válido.");
+  // Redirigir si no hay ID válido
+  header("Location: cursos.php");
+  exit;
 }
 
-$archivo_inscripciones = 'data/inscripciones.json';
-$archivo_temas = 'data/temas.json';
+try {
+    // 1. Verificar si el curso existe
+    $stmt = $pdo->prepare("SELECT titulo FROM cursos WHERE id = ?");
+    $stmt->execute([$id_curso]);
+    $curso = $stmt->fetch();
 
-$inscripciones = file_exists($archivo_inscripciones) ? json_decode(file_get_contents($archivo_inscripciones), true) : [];
-$temas = file_exists($archivo_temas) ? json_decode(file_get_contents($archivo_temas), true) : [];
-
-// Verificar que el curso exista
-$curso_valido = false;
-$nombre_curso = '';
-foreach ($temas as $t) {
-  if ($t['id'] == $id_curso) {
-    $curso_valido = true;
-    $nombre_curso = $t['titulo'];
-    break;
-  }
-}
-if (!$curso_valido) {
-  die("El curso no existe o fue eliminado.");
-}
-
-// Verificar si ya está inscrito
-foreach ($inscripciones as $i) {
-  if ($i['correo'] === $usuario['correo'] && $i['id_curso'] === $id_curso) {
-    echo "<script>alert('✅ Ya estás inscrito en el curso $nombre_curso'); window.location='index.php';</script>";
+    if (!$curso) {
+        // Curso no existe, redirigir
+        header("Location: cursos.php");
+        exit;
+    }
+    
+    // 2. Intentar registrar la inscripción
+    $sql = "INSERT INTO inscripciones (usuario_correo, curso_id, fecha_inscripcion) 
+            VALUES (?, ?, NOW())";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$correo_usuario, $id_curso]);
+    
+    // Éxito: Redirigir al detalle del curso
+    $nombre_curso = htmlspecialchars($curso['titulo']);
+    echo "<script>alert('✅ ¡Felicitaciones! Te has inscrito en el curso $nombre_curso.'); window.location='curso_detalle.php?id=$id_curso';</script>";
     exit;
-  }
+    
+} catch (PDOException $e) {
+    // Error 23000 es la violación de la clave única (ya inscrito)
+    if ($e->getCode() == 23000) {
+        $nombre_curso = $curso['titulo'] ?? 'el curso';
+        echo "<script>alert('⚠️ Ya estás inscrito en $nombre_curso.'); window.location='curso_detalle.php?id=$id_curso';</script>";
+        exit;
+    }
+    
+    // Otro error de BD
+    error_log("Error de inscripción: " . $e->getMessage());
+    echo "<script>alert('❌ Error al procesar tu inscripción. Intenta de nuevo.'); window.location='cursos.php';</script>";
+    exit;
 }
-
-// Registrar nueva inscripción
-$nueva = [
-  "correo" => $usuario['correo'],
-  "nombre" => $usuario['nombre'],
-  "id_curso" => $id_curso,
-  "curso" => $nombre_curso,
-  "fecha" => date("Y-m-d H:i:s")
-];
-
-$inscripciones[] = $nueva;
-file_put_contents($archivo_inscripciones, json_encode($inscripciones, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-echo "<script>alert('🎓 Te has inscrito en $nombre_curso'); window.location='index.php';</script>";
-exit;
 ?>
