@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto - EduLive</title>
+
+  <!-- Anti flash blanco -->
+  <script>
+    (function() {
+      const savedMode = localStorage.getItem('theme');
+      if (savedMode === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.background = '#0f172a';
+      } else {
+        document.documentElement.style.background = '#f1f5f9';
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style_moderno.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <i data-lucide="graduation-cap"></i>
+      <span>EduLive</span>
+    </div>
+
+    <nav class="menu">
+      <a href="index.html"><i data-lucide="home"></i> Inicio</a>
+      <a href="cursos.html"><i data-lucide="book-open"></i> Cursos</a>
+      <a href="panel.html"><i data-lucide="layout-dashboard"></i> Mi Panel</a>
+      <a href="contacto.html" class="active"><i data-lucide="mail"></i> Contacto</a>
+    </nav>
+
+    <div class="user-mini">
+      <div class="avatar"><i data-lucide="user"></i></div>
+      <div class="user-info">
+        <h4>Edward Potosme</h4>
+        <p>usuario@edulive.com</p>
+      </div>
+    </div>
+
+    <button id="modeBtn" class="mode-toggle">
+      <i data-lucide="moon"></i> Oscuro
+    </button>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="content" id="content">
+    <section class="banner">
+      <h1 class="title">✉️ Contáctanos</h1>
+      <p class="desc">¿Tienes dudas o sugerencias? Envía tu mensaje y te responderemos pronto.</p>
+    </section>
+
+    <section class="contact-section">
+      <div class="contact-header">
+        <i data-lucide="message-square"></i>
+        <h2>Formulario de contacto</h2>
+        <p>Completa el formulario para comunicarte con el equipo de EduLive.</p>
+      </div>
+
+      <form class="contact-form" onsubmit="return enviarMensaje(event)">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre..." required>
+
+        <label for="correo">Correo electrónico</label>
+        <input type="email" id="correo" name="correo" placeholder="tucorreo@example.com" required>
+
+        <label for="mensaje">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe tu mensaje aquí..." required></textarea>
+
+        <button type="submit" class="btn">Enviar mensaje</button>
+      </form>
+
+      <div id="alerta" class="alerta"></div>
+    </section>
+
+    <footer class="footer">
+      © 2025 EduLive — Plataforma Educativa • Hecho con ❤️
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+
+    const body = document.body;
+    const modeBtn = document.getElementById("modeBtn");
+    const savedMode = localStorage.getItem("theme");
+
+    if (savedMode === "dark") {
+      body.classList.add("dark");
+      modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
+    } else {
+      modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
+    }
+
+    modeBtn.addEventListener("click", () => {
+      const isDark = body.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      modeBtn.innerHTML = isDark
+        ? '<i data-lucide="sun"></i> Claro'
+        : '<i data-lucide="moon"></i> Oscuro';
+      lucide.createIcons();
+    });
+
+    // Simular envío del mensaje
+    function enviarMensaje(e) {
+      e.preventDefault();
+      const alerta = document.getElementById('alerta');
+      alerta.innerHTML = "✅ Tu mensaje ha sido enviado correctamente.";
+      alerta.classList.add('success');
+      e.target.reset();
+      setTimeout(() => alerta.innerHTML = '', 4000);
+    }
+  </script>
+
+  <style>
+    .contact-section {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--card);
+      padding: 2rem;
+      border-radius: 20px;
+      color: var(--text);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-header h2 {
+      margin-top: 0.5rem;
+    }
+
+    .contact-form label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      margin-top: 0.3rem;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      box-shadow: 0 0 0 2px var(--btn);
+    }
+
+    .alerta {
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .alerta.success {
+      color: #22c55e;
+    }
+  </style>
+
+</body>
+</html>

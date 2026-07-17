@@ -51,7 +51,7 @@ try {
 
     // Éxito
     $mensaje = "Te has desinscrito del curso \"{$nombre_curso}\" correctamente. Tu progreso fue reiniciado.";
-    $_SESSION['mensaje'] = $mensaje;
+    $_SESSION['flash_info'] = $mensaje;
     header("Location: cursos.php");
     exit;
 
@@ -59,7 +59,7 @@ try {
     // Si algo falla, revierte todos los cambios.
     $pdo->rollBack();
     error_log("Error al desinscribirse y borrar progreso: " . $e->getMessage());
-    $_SESSION['error'] = "❌ Error interno al procesar la desinscripción. Intenta de nuevo.";
+    $_SESSION['flash_error'] = "Error interno al procesar la desinscripción. Intenta de nuevo.";
     header("Location: curso_detalle.php?id=" . $id_curso);
     exit;
 }

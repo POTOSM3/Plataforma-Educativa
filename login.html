@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión - EduLive</title>
+  <link rel="stylesheet" href="css/style_moderno.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    (function() {
+      const savedMode = localStorage.getItem('theme');
+      if (savedMode === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.background = '#0f172a';
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <main class="auth-container">
+    <div class="auth-card">
+      <h1>🔐 Iniciar sesión</h1>
+      <p>Accede a tu cuenta de EduLive</p>
+
+      <form onsubmit="iniciarSesion(event)">
+        <label for="correo">Correo electrónico</label>
+        <input type="email" id="correo" required placeholder="correo@example.com">
+
+        <label for="contraseña">Contraseña</label>
+        <input type="password" id="contraseña" required placeholder="••••••••">
+
+        <button type="submit" class="btn">Entrar</button>
+      </form>
+
+      <p class="auth-link">¿No tienes cuenta? <a href="registro.html">Regístrate</a></p>
+      <div id="alerta"></div>
+    </div>
+  </main>
+
+  <script>
+    function iniciarSesion(e) {
+      e.preventDefault();
+      const correo = document.getElementById("correo").value.trim();
+      const pass = document.getElementById("contraseña").value.trim();
+      const alerta = document.getElementById("alerta");
+
+      let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+      const user = usuarios.find(u => u.correo === correo && u.pass === pass);
+
+      if (!user) {
+        alerta.textContent = "❌ Correo o contraseña incorrectos.";
+        alerta.style.color = "red";
+        return;
+      }
+
+      localStorage.setItem("usuarioActual", JSON.stringify(user));
+      alerta.textContent = "✅ Bienvenido, " + user.nombre;
+      alerta.style.color = "lightgreen";
+
+      setTimeout(() => window.location.href = "index.html", 2000);
+    }
+  </script>
+
+  <style>
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    }
+
+    .auth-card {
+      background: var(--card);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 2rem 3rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 350px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    input:focus {
+      box-shadow: 0 0 0 2px var(--btn);
+    }
+
+    #alerta {
+      margin-top: 10px;
+      font-weight: 600;
+    }
+  </style>
+</body>
+</html>
+

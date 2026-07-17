@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio - EduLive</title>
+
+  <!-- ✅ Anti-flash oscuro -->
+  <script>
+    (function() {
+      const savedMode = localStorage.getItem('theme');
+      if (savedMode === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.background = '#0f172a';
+        document.body && (document.body.style.background = '#0f172a');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.style.background = '#f1f5f9';
+        document.body && (document.body.style.background = '#f1f5f9');
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style_moderno.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <i data-lucide="graduation-cap"></i>
+      <span>EduLive</span>
+    </div>
+
+    <nav class="menu">
+      <a href="index.html" class="active"><i data-lucide="home"></i> Inicio</a>
+      <a href="cursos.html"><i data-lucide="book-open"></i> Cursos</a>
+      <a href="panel.html"><i data-lucide="layout-dashboard"></i> Mi Panel</a>
+      <a href="contacto.html"><i data-lucide="mail"></i> Contacto</a>
+    </nav>
+
+    <div class="user-mini">
+      <div class="avatar"><i data-lucide="user"></i></div>
+      <div class="user-info">
+        <h4>Edward Potosme</h4>
+        <p>usuario@edulive.com</p>
+      </div>
+    </div>
+
+    <button id="modeBtn" class="mode-toggle">
+      <i data-lucide="moon"></i> Oscuro
+    </button>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="content" id="content">
+    <section class="banner">
+      <h1 class="title">👋 Bienvenido a EduLive</h1>
+      <p class="desc">Explora nuestros cursos y mejora tus conocimientos cada día.</p>
+      <a href="cursos.html" class="btn">Ver cursos</a>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <img src="img/lenguaje.jpg" class="curso-img" alt="Lenguaje">
+        <h3>Lenguaje</h3>
+        <p>Mejora tu comprensión lectora y redacción con ejercicios prácticos.</p>
+        <a href="curso_detalle.html" class="btn">Ver curso</a>
+      </article>
+
+      <article class="card">
+        <img src="img/matematica.jpg" class="curso-img" alt="Matemática">
+        <h3>Matemática</h3>
+        <p>Aprende aritmética, álgebra y lógica de una forma interactiva.</p>
+        <a href="curso_detalle.html" class="btn">Ver curso</a>
+      </article>
+
+      <article class="card">
+        <img src="img/ciencias.jpg" class="curso-img" alt="Ciencias">
+        <h3>Ciencias</h3>
+        <p>Explora biología, química y física con ejemplos del mundo real.</p>
+        <a href="curso_detalle.html" class="btn">Ver curso</a>
+      </article>
+    </section>
+
+    <footer class="footer">
+      © 2025 EduLive — Plataforma Educativa • Hecho con ❤️
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+
+    const body = document.body;
+    const modeBtn = document.getElementById("modeBtn");
+    const savedMode = localStorage.getItem("theme");
+
+    if (savedMode === "dark") {
+      body.classList.add("dark");
+      modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
+    } else {
+      modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
+    }
+
+    modeBtn.addEventListener("click", () => {
+      const isDark = body.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      modeBtn.innerHTML = isDark
+        ? '<i data-lucide="sun"></i> Claro'
+        : '<i data-lucide="moon"></i> Oscuro';
+      lucide.createIcons();
+    });
+  </script>
+
+</body>
+</html>

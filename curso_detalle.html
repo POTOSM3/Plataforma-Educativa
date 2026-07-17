@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curso - EduLive</title>
+
+  <!-- Evitar flash blanco -->
+  <script>
+    (function() {
+      const savedMode = localStorage.getItem('theme');
+      if (savedMode === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.background = '#0f172a';
+      } else {
+        document.documentElement.style.background = '#f1f5f9';
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style_moderno.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <i data-lucide="graduation-cap"></i>
+      <span>EduLive</span>
+    </div>
+
+    <nav class="menu">
+      <a href="index.html"><i data-lucide="home"></i> Inicio</a>
+      <a href="cursos.html" class="active"><i data-lucide="book-open"></i> Cursos</a>
+      <a href="panel.html"><i data-lucide="layout-dashboard"></i> Mi Panel</a>
+      <a href="contacto.html"><i data-lucide="mail"></i> Contacto</a>
+    </nav>
+
+    <div class="user-mini">
+      <div class="avatar"><i data-lucide="user"></i></div>
+      <div class="user-info">
+        <h4>Edward Potosme</h4>
+        <p>usuario@edulive.com</p>
+      </div>
+    </div>
+
+    <button id="modeBtn" class="mode-toggle">
+      <i data-lucide="moon"></i> Oscuro
+    </button>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="content" id="content">
+    <section class="banner">
+      <h1 class="title">📘 Lenguaje</h1>
+      <p class="desc">Curso completo de gramática, ortografía y lectura comprensiva.</p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <i data-lucide="file-text"></i>
+        <h3>📄 Guía en PDF</h3>
+        <p>Descarga el material teórico del curso.</p>
+        <a class="btn" href="recursos/lenguaje/guia.pdf" target="_blank">Ver PDF</a>
+      </article>
+
+      <article class="card">
+        <i data-lucide="video"></i>
+        <h3>🎥 Clase en video</h3>
+        <p>Visualiza clases grabadas para reforzar tu aprendizaje.</p>
+        <a class="btn" href="https://www.youtube.com/watch?v=ysz5S6PUM-U" target="_blank">Ver video</a>
+      </article>
+
+      <article class="card">
+        <i data-lucide="help-circle"></i>
+        <h3>🧠 Evaluación</h3>
+        <p>Evalúa tus conocimientos con un quiz final.</p>
+        <a class="btn" href="#" onclick="alert('Simulación: Aquí iría tu cuestionario 😎')">Ir al Quiz</a>
+      </article>
+    </section>
+
+    <footer class="footer">
+      © 2025 EduLive — Plataforma Educativa • Hecho con ❤️
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+
+    const body = document.body;
+    const modeBtn = document.getElementById("modeBtn");
+    const savedMode = localStorage.getItem("theme");
+
+    if (savedMode === "dark") {
+      body.classList.add("dark");
+      modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
+    } else {
+      modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
+    }
+
+    modeBtn.addEventListener("click", () => {
+      const isDark = body.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      modeBtn.innerHTML = isDark
+        ? '<i data-lucide="sun"></i> Claro'
+        : '<i data-lucide="moon"></i> Oscuro';
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

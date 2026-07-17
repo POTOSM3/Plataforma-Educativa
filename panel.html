@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel - EduLive</title>
+
+  <!-- Anti flash blanco -->
+  <script>
+    (function() {
+      const savedMode = localStorage.getItem('theme');
+      if (savedMode === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.background = '#0f172a';
+      } else {
+        document.documentElement.style.background = '#f1f5f9';
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style_moderno.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <i data-lucide="graduation-cap"></i>
+      <span>EduLive</span>
+    </div>
+
+    <nav class="menu">
+      <a href="index.html"><i data-lucide="home"></i> Inicio</a>
+      <a href="cursos.html"><i data-lucide="book-open"></i> Cursos</a>
+      <a href="panel.html" class="active"><i data-lucide="layout-dashboard"></i> Mi Panel</a>
+      <a href="contacto.html"><i data-lucide="mail"></i> Contacto</a>
+    </nav>
+
+    <div class="user-mini">
+      <div class="avatar"><i data-lucide="user"></i></div>
+      <div class="user-info">
+        <h4>Edward Potosme</h4>
+        <p>usuario@edulive.com</p>
+      </div>
+    </div>
+
+    <button id="modeBtn" class="mode-toggle">
+      <i data-lucide="moon"></i> Oscuro
+    </button>
+  </aside>
+
+  <!-- Contenido -->
+  <main class="content" id="content">
+    <section class="banner">
+      <h1 class="title">🎓 Panel del Estudiante</h1>
+      <p class="desc">Bienvenido, Edward. Aquí puedes revisar tu progreso y acceder rápidamente a tus cursos.</p>
+    </section>
+
+    <!-- Tarjetas de progreso -->
+    <section class="grid">
+      <article class="card">
+        <i data-lucide="check-circle"></i>
+        <h3>Lenguaje</h3>
+        <p>Progreso: <strong>80%</strong></p>
+        <div class="progress-bar">
+          <div class="progress" style="width:80%;"></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <i data-lucide="check-circle"></i>
+        <h3>Matemática</h3>
+        <p>Progreso: <strong>50%</strong></p>
+        <div class="progress-bar">
+          <div class="progress" style="width:50%;"></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <i data-lucide="check-circle"></i>
+        <h3>Ciencias</h3>
+        <p>Progreso: <strong>30%</strong></p>
+        <div class="progress-bar">
+          <div class="progress" style="width:30%;"></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <i data-lucide="check-circle"></i>
+        <h3>Sociales</h3>
+        <p>Progreso: <strong>10%</strong></p>
+        <div class="progress-bar">
+          <div class="progress" style="width:10%;"></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <i data-lucide="check-circle"></i>
+        <h3>Inglés</h3>
+        <p>Progreso: <strong>65%</strong></p>
+        <div class="progress-bar">
+          <div class="progress" style="width:65%;"></div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Botones rápidos -->
+    <section class="section">
+      <h3>⚡ Accesos Rápidos</h3>
+      <div class="quick-buttons">
+        <a href="cursos.html" class="btn">Ir a Cursos</a>
+        <a href="curso_detalle.html" class="btn">Revisar Material</a>
+        <a href="contacto.html" class="btn">Contactar Tutor</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      © 2025 EduLive — Plataforma Educativa • Hecho con ❤️
+    </footer>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+
+    const body = document.body;
+    const modeBtn = document.getElementById("modeBtn");
+    const savedMode = localStorage.getItem("theme");
+
+    if (savedMode === "dark") {
+      body.classList.add("dark");
+      modeBtn.innerHTML = '<i data-lucide="sun"></i> Claro';
+    } else {
+      modeBtn.innerHTML = '<i data-lucide="moon"></i> Oscuro';
+    }
+
+    modeBtn.addEventListener("click", () => {
+      const isDark = body.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      modeBtn.innerHTML = isDark
+        ? '<i data-lucide="sun"></i> Claro'
+        : '<i data-lucide="moon"></i> Oscuro';
+      lucide.createIcons();
+    });
+  </script>
+
+  <style>
+    /* Barra de progreso simple */
+    .progress-bar {
+      width: 100%;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 8px;
+      height: 10px;
+    }
+
+    .progress {
+      height: 10px;
+      background: #22c55e;
+      transition: width 0.5s ease;
+    }
+
+    .quick-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+  </style>
+
+</body>
+</html>

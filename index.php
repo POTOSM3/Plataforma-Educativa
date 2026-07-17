@@ -10,18 +10,55 @@ $usuario = $_SESSION['usuario'];
 // 🔄 MODIFICACIÓN: Conexión y carga de cursos desde la BD
 require 'conexion.php'; 
 try {
-    // Carga los primeros 3 cursos para mostrarlos como destacados
-    $stmt = $pdo->query("SELECT id, titulo, descripcion, imagen FROM cursos LIMIT 3");
+    // Cursos Destacados: prioriza materias en las que el usuario AÚN no está inscrito
+    $stmt = $pdo->prepare("
+        SELECT id, titulo, descripcion, imagen 
+        FROM cursos 
+        WHERE id NOT IN (SELECT curso_id FROM inscripciones WHERE usuario_correo = ?)
+        ORDER BY titulo ASC 
+        LIMIT 3
+    ");
+    $stmt->execute([$usuario['correo']]);
     $temas = $stmt->fetchAll();
+
+    // Si ya está inscrito en todo, mostramos cualquier curso como respaldo
+    if (empty($temas)) {
+        $stmt_fallback = $pdo->query("SELECT id, titulo, descripcion, imagen FROM cursos ORDER BY titulo ASC LIMIT 3");
+        $temas = $stmt_fallback->fetchAll();
+    }
     
     // Contar inscripciones del usuario para el Panel de Información
     $stmt_inscritos = $pdo->prepare("SELECT COUNT(*) FROM inscripciones WHERE usuario_correo = ?");
     $stmt_inscritos->execute([$usuario['correo']]);
     $total_inscritos = $stmt_inscritos->fetchColumn();
 
+    // Próximo Quiz REAL: primer curso inscrito donde aún no se ha completado el quiz final
+    $stmt_proximo = $pdo->prepare("
+        SELECT c.id, c.titulo
+        FROM inscripciones i
+        JOIN cursos c ON i.curso_id = c.id
+        LEFT JOIN progreso p ON p.curso_id = c.id AND p.usuario_correo = i.usuario_correo
+        WHERE i.usuario_correo = ? AND (p.quiz_completado IS NULL OR p.quiz_completado = 0)
+        ORDER BY i.fecha_inscripcion ASC
+        LIMIT 1
+    ");
+    $stmt_proximo->execute([$usuario['correo']]);
+    $proximo_quiz = $stmt_proximo->fetch(PDO::FETCH_ASSOC);
+
+    // Progreso general (promedio de avance entre todos los cursos inscritos) para el anillo
+    $stmt_progreso_gen = $pdo->prepare("
+        SELECT AVG( (visto_pdf + visto_video + quiz_completado) / 3 * 100 ) AS promedio
+        FROM progreso
+        WHERE usuario_correo = ?
+    ");
+    $stmt_progreso_gen->execute([$usuario['correo']]);
+    $progreso_general = round($stmt_progreso_gen->fetchColumn() ?: 0);
+
 } catch (PDOException $e) {
     $temas = [];
     $total_inscritos = 0;
+    $proximo_quiz = null;
+    $progreso_general = 0;
     error_log("Error al cargar datos en index.php: " . $e->getMessage());
 }
 
@@ -73,11 +110,27 @@ include 'components/layout.php';
     <div class="panel-card" style="background:#F9A825; color:black;">
       <i data-lucide="award"></i>
       <h3>Próximo Quiz</h3>
-      <p>Matemática - Geometría.</p>
-      <a href="quiz.php?tema=2" class="panel-btn">Ir al Quiz</a>
+      <?php if ($proximo_quiz): ?>
+        <p><?= htmlspecialchars($proximo_quiz['titulo']) ?></p>
+        <a href="curso_detalle.php?id=<?= $proximo_quiz['id'] ?>" class="panel-btn">Ir al Quiz</a>
+      <?php else: ?>
+        <p>¡Estás al día! No tienes quizzes pendientes.</p>
+        <a href="cursos.php" class="panel-btn">Ver Cursos</a>
+      <?php endif; ?>
     </div>
     
-    <div class="panel-card" style="background:#3B82F6; color:white;">
+    <div class="panel-card" style="background:#3B82F6; color:white; position:relative;">
+      <?php
+        $circ = 2 * pi() * 26;
+        $offset = $circ - ($progreso_general / 100 * $circ);
+      ?>
+      <svg width="60" height="60" viewBox="0 0 60 60" style="position:absolute; top:15px; right:15px;">
+        <circle cx="30" cy="30" r="26" stroke="rgba(255,255,255,0.25)" stroke-width="6" fill="none"></circle>
+        <circle cx="30" cy="30" r="26" stroke="#fff" stroke-width="6" fill="none"
+          stroke-dasharray="<?= $circ ?>" stroke-dashoffset="<?= $offset ?>"
+          stroke-linecap="round" transform="rotate(-90 30 30)"></circle>
+        <text x="30" y="35" text-anchor="middle" fill="#fff" font-size="14" font-weight="700"><?= $progreso_general ?>%</text>
+      </svg>
       <i data-lucide="layout-dashboard"></i>
       <h3>Mi Progreso</h3>
       <p>Revisa tus notas y logros.</p>
@@ -90,7 +143,7 @@ include 'components/layout.php';
   <section class="grid">
     <?php foreach ($temas as $t): ?>
       <article class="card">
-        <i data-lucide="bookmark"></i>
+        <i data-lucide="<?= htmlspecialchars($t['imagen'] ?: 'bookmark') ?>"></i>
         <h3><?= htmlspecialchars($t['titulo']) ?></h3>
         <p><?= htmlspecialchars($t['descripcion']) ?></p>
         <a href="curso_detalle.php?id=<?= $t['id'] ?>" class="btn">Ver curso</a>

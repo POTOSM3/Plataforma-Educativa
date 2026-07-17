@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - EduLive</title>
+  <link rel="stylesheet" href="css/style_moderno.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    // Evitar flash blanco
+    (function() {
+      const savedMode = localStorage.getItem('theme');
+      if (savedMode === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.background = '#0f172a';
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <main class="auth-container">
+    <div class="auth-card">
+      <h1>📝 Crear cuenta</h1>
+      <p>Regístrate para acceder a EduLive</p>
+
+      <form onsubmit="registrarUsuario(event)">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" required placeholder="Tu nombre completo">
+
+        <label for="correo">Correo electrónico</label>
+        <input type="email" id="correo" required placeholder="correo@example.com">
+
+        <label for="contraseña">Contraseña</label>
+        <input type="password" id="contraseña" required placeholder="••••••••">
+
+        <button type="submit" class="btn">Registrar</button>
+      </form>
+
+      <p class="auth-link">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+      <div id="alerta"></div>
+    </div>
+  </main>
+
+  <script>
+    function registrarUsuario(e) {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value.trim();
+      const correo = document.getElementById("correo").value.trim();
+      const pass = document.getElementById("contraseña").value.trim();
+      const alerta = document.getElementById("alerta");
+
+      if (!nombre || !correo || !pass) {
+        alerta.textContent = "⚠️ Todos los campos son obligatorios.";
+        alerta.style.color = "orange";
+        return;
+      }
+
+      let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+      if (usuarios.find(u => u.correo === correo)) {
+        alerta.textContent = "❌ Este correo ya está registrado.";
+        alerta.style.color = "red";
+        return;
+      }
+
+      usuarios.push({ nombre, correo, pass });
+      localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+      alerta.textContent = "✅ Registro exitoso. Ahora puedes iniciar sesión.";
+      alerta.style.color = "lightgreen";
+      setTimeout(() => window.location.href = "login.html", 2000);
+    }
+  </script>
+
+  <style>
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    }
+
+    .auth-card {
+      background: var(--card);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 2rem 3rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 350px;
+    }
+
+    .auth-card h1 {
+      margin-bottom: 0.3rem;
+    }
+
+    .auth-card p {
+      margin-bottom: 1rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    input:focus {
+      box-shadow: 0 0 0 2px var(--btn);
+    }
+
+    .auth-link {
+      margin-top: 1rem;
+    }
+
+    #alerta {
+      margin-top: 10px;
+      font-weight: 600;
+    }
+  </style>
+</body>
+</html>

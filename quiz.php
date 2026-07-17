@@ -7,24 +7,42 @@ if (!isset($_SESSION['usuario'])) {
 
 require 'conexion.php'; // Asegúrate de que tu archivo de conexión esté incluido
 
-$tema = isset($_GET['tema']) ? intval($_GET['tema']) : 1;
+$quiz_id = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : null;
 $preguntas = [];
 $curso_titulo = "Cuestionario";
+$curso_id_del_quiz = null;
+$es_quiz_final = false;
 
-// 1. Obtener preguntas desde la base de datos
+// 1. Obtener el quiz + su materia
 try {
-    // Primero, obtenemos el título del curso para el banner
-    $stmt_curso = $pdo->prepare("SELECT titulo FROM cursos WHERE id = ?");
-    $stmt_curso->execute([$tema]);
-    $curso_data = $stmt_curso->fetch();
-    if ($curso_data) {
-        $curso_titulo = "Cuestionario de " . htmlspecialchars($curso_data['titulo']);
-    }
+    $stmt_quiz = $pdo->prepare("
+        SELECT q.id, q.titulo, q.tipo,
+               COALESCE(q.curso_id, l.curso_id) AS curso_id,
+               c.titulo AS curso_titulo_real
+        FROM quizzes q
+        LEFT JOIN lecciones l ON l.quiz_id = q.id
+        LEFT JOIN cursos c ON c.id = COALESCE(q.curso_id, l.curso_id)
+        WHERE q.id = ?
+    ");
+    $stmt_quiz->execute([$quiz_id]);
+    $quiz_data = $stmt_quiz->fetch(PDO::FETCH_ASSOC);
 
-    // Luego, obtenemos las preguntas
-    $stmt_preguntas = $pdo->prepare("SELECT * FROM preguntas_quiz WHERE curso_id = ?");
-    $stmt_preguntas->execute([$tema]);
-    $preguntas = $stmt_preguntas->fetchAll();
+    if ($quiz_data) {
+        $curso_titulo = htmlspecialchars($quiz_data['titulo']);
+        $curso_id_del_quiz = $quiz_data['curso_id'];
+        $es_quiz_final = ($quiz_data['tipo'] === 'final');
+
+        // 2. Obtener las preguntas conectadas a este quiz (vía leccion_quiz)
+        $stmt_preguntas = $pdo->prepare("
+            SELECT p.id, p.pregunta, p.opcion_a, p.opcion_b, p.opcion_c, p.opcion_d
+            FROM leccion_quiz lq
+            JOIN preguntas_quiz p ON lq.pregunta_id = p.id
+            WHERE lq.quiz_id = ?
+            ORDER BY lq.orden ASC
+        ");
+        $stmt_preguntas->execute([$quiz_id]);
+        $preguntas = $stmt_preguntas->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 } catch (PDOException $e) {
     // Manejo de errores de base de datos
@@ -53,14 +71,14 @@ include 'components/layout.php';
 <main class="content" id="content">
     
     <section class="banner">
-        <h1 class="title">🧩 <?= $curso_titulo ?></h1>
+        <h1 class="title">🧩 <?= $es_quiz_final ? 'Quiz Final: ' : 'Quiz: ' ?><?= $curso_titulo ?></h1>
         <p class="desc">Responde las siguientes preguntas. ¡Mucha suerte!</p>
     </section>
 
     <section class="quiz-section">
         <?php if (!empty($preguntas)): ?>
             <form action="guardar_resultado.php" method="POST" class="quiz-form">
-                <input type="hidden" name="tema" value="<?= $tema ?>">
+                <input type="hidden" name="quiz_id" value="<?= $quiz_id ?>">
 
                 <?php foreach ($preguntas as $i => $p): ?>
                     <div class="pregunta-card">
@@ -88,7 +106,7 @@ include 'components/layout.php';
             <div class="alert-box">
                 <h3>⚠️ No hay preguntas disponibles</h3>
                 <p>Este cuestionario aún no ha sido cargado. Por favor, revisa el curso o intenta más tarde.</p>
-                <a href="cursos.php" class="btn-back">Volver a Cursos</a>
+                <a href="<?= $curso_id_del_quiz ? 'curso_detalle.php?id=' . $curso_id_del_quiz : 'cursos.php' ?>" class="btn-back">Volver al Curso</a>
             </div>
         <?php endif; ?>
     </section>

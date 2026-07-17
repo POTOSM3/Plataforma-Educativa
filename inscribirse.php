@@ -37,20 +37,23 @@ try {
     
     // Éxito: Redirigir al detalle del curso
     $nombre_curso = htmlspecialchars($curso['titulo']);
-    echo "<script>alert('✅ ¡Felicitaciones! Te has inscrito en el curso $nombre_curso.'); window.location='curso_detalle.php?id=$id_curso';</script>";
+    $_SESSION['flash_success'] = "¡Felicitaciones! Te has inscrito en el curso {$nombre_curso}.";
+    header("Location: curso_detalle.php?id={$id_curso}");
     exit;
     
 } catch (PDOException $e) {
     // Error 23000 es la violación de la clave única (ya inscrito)
     if ($e->getCode() == 23000) {
-        $nombre_curso = $curso['titulo'] ?? 'el curso';
-        echo "<script>alert('⚠️ Ya estás inscrito en $nombre_curso.'); window.location='curso_detalle.php?id=$id_curso';</script>";
+        $nombre_curso = htmlspecialchars($curso['titulo'] ?? 'el curso');
+        $_SESSION['flash_info'] = "Ya estás inscrito en {$nombre_curso}.";
+        header("Location: curso_detalle.php?id={$id_curso}");
         exit;
     }
     
     // Otro error de BD
     error_log("Error de inscripción: " . $e->getMessage());
-    echo "<script>alert('❌ Error al procesar tu inscripción. Intenta de nuevo.'); window.location='cursos.php';</script>";
+    $_SESSION['flash_error'] = "Error al procesar tu inscripción. Intenta de nuevo.";
+    header("Location: cursos.php");
     exit;
 }
 ?>

@@ -12,7 +12,7 @@ body {
 :root {
   --bg: #E3F2FD;
   --card: #fff;
-  --text: #0D1B2A;
+  --text: #E3F2FD
   --muted: #5C6F7B;
   --brand1: #1565C0;
   --brand2: #29B6F6;
@@ -1052,4 +1052,35 @@ body.dark-mode .card .btn {
     height: 100%;
     background: linear-gradient(90deg, #118AB2, #06D6A0); /* Degradado atractivo */
     transition: width 0.5s ease-in-out;
+}
+/* ======================================================= */
+/* ====== CORRECCIÓN FINAL DE VISIBILIDAD MODO OSCURO ====== */
+/* ======================================================= */
+
+/* 1. FORZAR COLOR DE TEXTO CLARO EN MODO OSCURO */
+/* Esto se aplica a CUALQUIER elemento descendiente del BODY */
+body.dark, 
+body.dark * {
+    color: var(--text) !important; 
+    /* El valor de --text es CLARO (#E3F2FD) en el modo oscuro */
+}
+
+/* 2. CORREGIR EL FONDO DE CELDAS DE TABLA (Gestión de Contenido) */
+body.dark td,
+body.dark th {
+    background-color: var(--card) !important; /* Fondo de tarjetas oscuro */
+    border-color: var(--muted) !important;
+}
+
+body.dark tr:nth-child(even) {
+    /* Color alterno para contraste */
+    background-color: var(--bg) !important; 
+}
+
+/* 3. CORREGIR INPUTS Y TEXTAREAS */
+body.dark input:not([type="submit"]):not([type="button"]):not([type="radio"]):not([type="checkbox"]), 
+body.dark textarea, 
+body.dark select {
+    background-color: var(--card) !important;
+    border-color: var(--muted) !important;
 }

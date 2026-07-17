@@ -1,4 +1,9 @@
 <?php
+// === INICIO DE DEBUGGING: SI HAY UN ERROR, AHORA DEBE MOSTRARSE ===
+error_reporting(E_ALL); 
+ini_set('display_errors', 1); 
+// ===================================================================
+
 session_start();
 if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
@@ -6,8 +11,9 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 // 1. Cargar el autoloader de Composer
-// La ruta es relativa a la carpeta donde se encuentra este script
-require 'vendor/autoload.php';
+// 🔴 ¡IMPORTANTE! VERIFICA ESTA RUTA. Si no funciona, prueba: 
+// require dirname(__DIR__) . '/vendor/autoload.php'; (Si 'vendor' está un nivel arriba)
+require 'vendor/autoload.php'; 
 require 'conexion.php'; 
 
 use Dompdf\Dompdf;
@@ -22,7 +28,7 @@ if (!$curso_id) {
 
 $curso_id = intval($curso_id);
 
-// --- 2. RECOPILAR DATOS DEL CERTIFICADO (CÓDIGO REPETIDO DE view_certificate.php) ---
+// --- 2. RECOPILAR DATOS DEL CERTIFICADO ---
 try {
     // 2a. Información del curso
     $stmt_curso = $pdo->prepare("SELECT titulo FROM cursos WHERE id = ?");
@@ -34,101 +40,62 @@ try {
     }
     $titulo_curso = htmlspecialchars($curso['titulo']);
 
-    // 2b. Información del progreso y fecha
+    // 2b. Información del progreso y la fecha de finalización
     $stmt_progreso = $pdo->prepare("SELECT certificado_emitido, updated_at FROM progreso WHERE usuario_correo = ? AND curso_id = ?");
     $stmt_progreso->execute([$usuario['correo'], $curso_id]);
     $progreso = $stmt_progreso->fetch(PDO::FETCH_ASSOC);
 
+
+    // 2c. VALIDACIÓN y DEFINICIÓN DE VARIABLES CRÍTICAS
+    
+    // VALIDACIÓN: El progreso y la bandera de emisión deben existir
     if (!$progreso || $progreso['certificado_emitido'] != 1) {
-        die("❌ Error: Certificado no emitido o curso no completado.");
+        die("⚠️ Error: El certificado no ha sido marcado para su emisión. Completa el curso primero.");
     }
     
-    // Datos para el certificado
-    $nombre_completo = htmlspecialchars($usuario['nombre']);
-    
-    // Manejo de la fecha
-    $fecha_para_certificado = date("Y-m-d H:i:s");
-    if (isset($progreso['updated_at'])) {
-        $fecha_para_certificado = $progreso['updated_at'];
-    } 
-    $timestamp_emision = strtotime($fecha_para_certificado);
-    $fecha_emision = date("d \d\e M, Y", $timestamp_emision);
-    
-    $codigo_verificacion = strtoupper(substr(md5($usuario['correo'] . $curso_id . $fecha_emision), 0, 10));
+    // 🟢 DEFINICIÓN DE VARIABLES FALTANTES (¡La causa más probable del fallo!) 🟢
+    $nombre_completo = htmlspecialchars($usuario['nombre'] ?? 'Usuario Desconocido'); 
+    $fecha_emision_raw = $progreso['updated_at'] ?? date('Y-m-d'); 
+    $fecha_emision = date('d/m/Y', strtotime($fecha_emision_raw)); 
+    $codigo_verificacion = strtoupper(substr(md5($usuario['correo'] . $curso_id . $fecha_emision_raw), 0, 10));
 
 } catch (PDOException $e) {
-    error_log("Error al cargar datos del certificado para descarga: " . $e->getMessage());
-    die("❌ Error interno del servidor.");
+    die("Error de base de datos: " . $e->getMessage());
 }
 
-// ----------------------------------------------------
-// --- 3. GENERACIÓN DEL PDF CON DOMPDF ---
-// ----------------------------------------------------
+// --- 3. CONSTRUCCIÓN DEL HTML ---
 
-// 3a. Configuración de Dompdf
-$options = new Options();
-$options->set('defaultFont', 'Helvetica'); 
-$options->set('isHtml5ParserEnabled', true);
-$dompdf = new Dompdf($options);
-
-// 3b. Contenido HTML del certificado (¡Solo el contenido!)
-// Usa solo CSS básico, Dompdf no es un navegador completo.
 $html = '
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Certificado - ' . $titulo_curso . '</title>
     <style>
-        /* CSS PRINCIPAL: Asegura que el contenido ocupe la página entera */
-        @page { 
-            margin: 0; /* Elimina todos los márgenes del PDF */
-        }
+        @page { margin: 0; }
         body { 
             font-family: sans-serif; 
             margin: 0; 
-            padding: 0; 
-            background-color: #ffffff; /* Fondo blanco */
+            background: #fff;
         }
-        
-        /* Contenedor principal: Define el borde y el centrado */
-        .certificado-container { 
-            width: 90%; /* Ancho reducido para dejar espacio para el borde visual */
-            height: 90%; /* Alto reducido para dejar espacio para el borde visual */
-            margin: 5% auto; /* Centrado vertical y horizontal */
-            padding: 40px; 
-            text-align: center;
-            /* Borde visual */
-            border: 15px solid #06D6A0; 
+        .certificado-container {
+            width: 100%;
+            height: 100vh;
+            padding: 50px;
             box-sizing: border-box;
-            background-color: #ffffff; 
+            text-align: center;
+            background-size: cover;
             color: #141a29;
-            /* Flexbox para centrar el contenido dentro del contenedor */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
-
-        /* Estilos de Tipografía */
-        h1 { 
-            color: #118AB2; 
-            font-size: 3rem; 
-            margin-bottom: 20px; 
-        }
-        .subtitulo { 
-            font-size: 1.5rem; 
-            color: #555; 
-            margin-bottom: 5px; 
-        }
+        h1 { font-size: 3rem; margin-top: 100px; color: #141a29; }
+        .subtitulo { font-size: 1.5rem; margin-top: 50px; color: #141a29; }
         .nombre { 
-            font-size: 4rem; 
-            color: #06D6A0; 
-            margin: 15px 0 25px; 
-            font-family: serif;
-            border-bottom: 2px dashed #06D6A0;
+            font-size: 3.5rem; 
+            border-bottom: 4px solid #06D6A0; 
             display: inline-block;
             padding-bottom: 5px;
+            margin-top: 15px;
+            font-weight: 300;
         }
         .curso { 
             font-size: 2.5rem; 
@@ -162,19 +129,26 @@ $html = '
     </div>
 </body>
 </html>
-
 ';
+
+// --- 4. GENERACIÓN DEL PDF CON DOMPDF ---
+$options = new Options();
+$options->set('isHtml5ParserEnabled', true);
+$options->set('isRemoteEnabled', true); 
+
+$dompdf = new Dompdf($options);
 
 $dompdf->loadHtml($html);
 
-// 3c. Renderizar y Descargar
-$dompdf->setPaper('Letter', 'landscape'); // Orientación horizontal
+$dompdf->setPaper('A4', 'landscape'); 
 $dompdf->render();
 
-// Nombre del archivo para la descarga
-$nombre_archivo_descarga = "Certificado_" . str_replace(" ", "_", $curso['titulo']) . ".pdf";
+// Forzar la descarga del archivo
+$file_name = "certificado_" . str_replace(' ', '_', $titulo_curso) . "_" . $usuario['id'] . ".pdf";
 
-// Forzar la descarga
-$dompdf->stream($nombre_archivo_descarga, ["Attachment" => true]);
-exit();
+$dompdf->stream($file_name, [
+    "Attachment" => true 
+]);
+
+exit;
 ?>
